@@ -1,48 +1,52 @@
-__author__ = 'tylin'
+#!/usr/bin/env python
+# 
+# File Name : preprocess.py
+#
+# Description :
+#
+# Usage :
+#
+# Creation Date : 02-01-2015
+# Last Modified : Mon Jan  5 17:50:53 2015
+# Author : Hao Fang
 
-import re, xml.sax.saxutils
+import sys
+from tokenizer.ptbtokenizer import PTBTokenizer
+import multiprocessing
 
-normalize1 = [
-    ('<skipped>', ''),         # strip "skipped" tags
-    (r'-\n', ''),              # strip end-of-line hyphenation and join lines
-    (r'\n', ' '),              # join lines
-#    (r'(\d)\s+(?=\d)', r'\1'), # join digits
-]
-normalize1 = [(re.compile(pattern), replace) for (pattern, replace) in normalize1]
+def tokenize(id_captions):
+    """Tokenize the captions for an image.
 
-# { | } ~      [ \ ] ^ _ `   (sp) ! " # $ % &    ( ) * +    : ; < = > ? @  /
-normalize2 = [
-    (r'([\{-\~\[-\` -\&\(-\+\:-\@\/])',r' \1 '), # tokenize punctuation. apostrophe is missing
-    (r'([^0-9])([\.,])',r'\1 \2 '),              # tokenize period and comma unless preceded by a digit
-    (r'([\.,])([^0-9])',r' \1 \2'),              # tokenize period and comma unless followed by a digit
-    (r'([0-9])(-)',r'\1 \2 ')                    # tokenize dash when preceded by a digit
-]
-normalize2 = [(re.compile(pattern), replace) for (pattern, replace) in normalize2]
+    Args:
+        id_captions: a tuple of (id, [captions])
 
-def normalize(s):
-    '''Normalize and tokenize text. This is lifted from NIST mteval-v11a.pl.'''
-    if type(s) is not str:
-        s = " ".join(s)
-    # language-independent part:
-    for (pattern, replace) in normalize1:
-        s = re.sub(pattern, replace, s)
-    s = xml.sax.saxutils.unescape(s, {'&quot;':'"'}) # &amp; &lt; &gt; ?
-    # language-dependent part (assuming Western languages):
-    s = " %s " % s
-    s = s.lower()         # this might not be identical to the original
-    for (pattern, replace) in normalize2:
-        s = re.sub(pattern, replace, s)
-    return s.split()
+    Returns:
+        a tuple of (id, [tokenized_captions]).
+    """
+    id = id_captions[0]
+    print >> sys.stderr, "Tokenizing", id
+    tokenized_captions = []
+    tokenizer = PTBTokenizer()
+    for s in id_captions[1]:
+        tokenized_captions.append(tokenizer.tokenize(s))
 
-def normalize_captions(obj):
-    '''
-    Normalize sentence in json object
-    :param obj: json object.  contains keys (image_ids) and values (single or list of sentences)
-    :return: normalize obj.  sentence is tokenized as a list of token
-    '''
-    for key, val in obj.items():
-        if type(val) is list:
-            obj[key] = map(normalize, map(str, val))
-        else:
-            obj[key] = normalize(str(val))
-    return obj
+    return (id, tokenized_captions)
+
+def tokenize_captions(obj, nthreads = 1):
+    """Tokenize the captions for all images in the json object.
+
+    Args:
+        obj: (id, [captions]) pairs in json format. Values are a list of
+        captions.
+        nthreads: number of threads, default 1.
+
+    Returns:
+        (image_id, [tokenized_captions]) in json format. Values are a list of
+        tokenized (and lower-cased) captions.
+    """
+    pool = multiprocessing.Pool(processes = nthreads)
+    #tokenized_captions = pool.map(tokenize, obj.items())
+    tokenized_captions = []
+    for k, v in obj.items():
+        tokenized_captions.append(tokenize((k, v)))
+    return dict(tokenized_captions)
