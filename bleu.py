@@ -2,6 +2,7 @@
 
 # bleu.py
 # David Chiang <chiang@isi.edu>
+# Modified: Hao Fang
 
 # Copyright (c) 2004-2006 University of Maryland. All rights
 # reserved. Do not redistribute without permission from the
@@ -10,15 +11,12 @@
 '''Provides:
 cook_refs(refs, n=4): Transform a list of reference sentences as strings into a form usable by cook_test().
 cook_test(test, refs, n=4): Transform a test sentence as a string (together with the cooked reference sentences) into a form usable by score_cooked().
-score_cooked(alltest, n=4): Score a list of cooked test sentences.
-The reason for breaking the BLEU computation into three phases cook_refs(), cook_test(), and score_cooked() is to allow the caller to calculate BLEU scores for multiple test sets as efficiently as possible.
 '''
 
 import optparse
 import copy
 import sys, math, re, xml.sax.saxutils
 from collections import defaultdict
-
 
 def precook(s, n=4, out=False):
     """Takes a string as input and returns an object that can be given to
@@ -84,36 +82,6 @@ def cook_test(test, (reflen, refmaxcounts), eff=None, n=4):
         result["correct"][len(ngram)-1] += min(refmaxcounts.get(ngram,0), count)
 
     return result
-
-def score_cooked(allcomps, n=4, addprec=0):
-    totalcomps = {'testlen':0, 'reflen':0, 'guess':[0]*n, 'correct':[0]*n}
-    for comps in allcomps:
-        for key in ['testlen','reflen']:
-            totalcomps[key] += comps[key]
-        for key in ['guess','correct']:
-            for k in xrange(n):
-                totalcomps[key][k] += comps[key][k]
-    bleu = 1.
-    for k in xrange(n):
-        bleu *= float(totalcomps['correct'][k]+addprec)/(totalcomps['guess'][k]+addprec)
-    bleu = bleu ** (1./n)
-    len_ratio = totalcomps['testlen']/float(totalcomps['reflen'])
-    if len_ratio < 1: #0 < totalcomps['testlen'] < totalcomps['reflen']:        
-        bleu *= math.exp(len_ratio-1)
-
-    if verbose:
-        sys.stderr.write("hyp words: %s\n" % totalcomps['testlen'])
-        sys.stderr.write("effective reference length: %s\n" % totalcomps['reflen'])
-        
-
-    if verbose:
-        for k in xrange(n):
-            prec = float(totalcomps['correct'][k]+addprec)/(totalcomps['guess'][k]+addprec)
-            sys.stderr.write("%d-gram precision:  %s\n" % (k+1,prec))
-    if verbose:
-        sys.stderr.write("length ratio:      %s\n" % (float(totalcomps['testlen'])/totalcomps['reflen']))
-        
-    return bleu, len_ratio
 
 class Bleu(object):
 
@@ -221,15 +189,18 @@ class Bleu(object):
             assert False, "unsupported reflen option %s" % option
 
         return reflen
+
+    def recompute_score(self, option=None, verbose=0):
+        self._score = None
+        self.compute_score(option, verbose)
+        return self._score
         
-    def compute_score(self, option=None, addprec=None):
+    def compute_score(self, option=None, verbose=0):
         if self._score is not None:
             return self._score
 
         if option is None:
             option = "average" if len(self.crefs) == 1 else "closest"
-        if addprec is None:
-            addprec = 1 if len(self.crefs) == 1 else 0 ## automatic bleu+1
             
         n = self.n
 
@@ -252,13 +223,19 @@ class Bleu(object):
             for key in ['guess','correct']:
                 for k in xrange(n):
                     totalcomps[key][k] += comps[key][k]
+            if verbose > 1:
+                print comps, reflen
+        if verbose > 0:
+            totalcomps['reflen'] = self._reflen
+            totalcomps['testlen'] = self._testlen
+            print totalcomps
 
         bleu = 1.
         small = 1e-9
         tiny = 1e-15 ## so that if guess is 0 still return 0
         for k in xrange(n): 
-            bleu *= float(totalcomps['correct'][k] + addprec + tiny ) \
-                    / (totalcomps['guess'][k] + addprec + small)
+            bleu *= float(totalcomps['correct'][k] + tiny ) \
+                    / (totalcomps['guess'][k] + small)
         bleu = bleu ** (1./n)
 
         ## smoothing: single-sentence effect on the whole doc
@@ -270,15 +247,12 @@ class Bleu(object):
         self._ratio = ratio
         return self._score
 
-
-    ## real interface
-    score = fscore = compute_score
-
 if __name__ == "__main__":
-    import itertool
+    import itertools
 
-    path_to_ref_file = 'misc/debug.ref.txt'
-    path_to_hypo_file = 'misc/debug.hypo.txt'
+    verbose = 2
+    path_to_ref_file = 'misc/data_preparation/tokenized_ref.txt'
+    path_to_hypo_file = 'misc/data_preparation/tokenized_hypo.txt'
 
     num_refs_per_hypo = 4
     bleus = Bleu()
@@ -301,9 +275,23 @@ if __name__ == "__main__":
         bleus += (testline, ref)
 
     ## STEP 3: EVALUATE (with effective ref len)
-    bleu = bleus.fscore(option='closest')
+    bleu = bleus.compute_score(option='closest', verbose=verbose)
     ratio = bleus.ratio()
     print >> sys.stderr, \
             "bleu%s = %.4lf, length_ratio = %.2lf (%d sentences, length option \"%s\")" \
             % ("+1" if bleus.size() == 1 else "", bleu, ratio, bleus.size(), \
             'closest')
+
+    #bleu = bleus.recompute_score(option='average', verbose=verbose)
+    #ratio = bleus.ratio()
+    #print >> sys.stderr, \
+    #        "bleu%s = %.4lf, length_ratio = %.2lf (%d sentences, length option \"%s\")" \
+    #        % ("+1" if bleus.size() == 1 else "", bleu, ratio, bleus.size(), \
+    #        'average')
+
+    #bleu = bleus.recompute_score(option='shortest', verbose=verbose)
+    #ratio = bleus.ratio()
+    #print >> sys.stderr, \
+    #        "bleu%s = %.4lf, length_ratio = %.2lf (%d sentences, length option \"%s\")" \
+    #        % ("+1" if bleus.size() == 1 else "", bleu, ratio, bleus.size(), \
+    #        'shortest')
