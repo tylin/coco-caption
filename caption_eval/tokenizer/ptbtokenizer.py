@@ -7,7 +7,7 @@
 # Usage :
 #
 # Creation Date : 29-12-2014
-# Last Modified : Fri 02 Jan 2015 03:55:52 PM PST
+# Last Modified : Mon 05 Jan 2015 08:50:28 PM PST
 # Author : Hao Fang
 
 import os
@@ -33,5 +33,7 @@ class PTBTokenizer:
                 stdin=p_echo.stdout, stdout=subprocess.PIPE, \
                 stderr=subprocess.PIPE)
         p_echo.stdout.close()
-        tokens = p_tokenizer.communicate()[0]
+        # not include the '\n' at the end 
+        # do not use rstrip in case '\n' is in the str
+        tokens = p_tokenizer.communicate()[0][:-1]
         return tokens

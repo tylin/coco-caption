@@ -7,7 +7,7 @@
 # Usage :
 #
 # Creation Date : 02-01-2015
-# Last Modified : Mon Jan  5 17:50:53 2015
+# Last Modified : Mon 05 Jan 2015 06:54:51 PM PST
 # Author : Hao Fang
 
 import sys
@@ -45,8 +45,8 @@ def tokenize_captions(obj, nthreads = 1):
         tokenized (and lower-cased) captions.
     """
     pool = multiprocessing.Pool(processes = nthreads)
-    #tokenized_captions = pool.map(tokenize, obj.items())
-    tokenized_captions = []
-    for k, v in obj.items():
-        tokenized_captions.append(tokenize((k, v)))
+    tokenized_captions = pool.map(tokenize, obj.items())
+    #tokenized_captions = []
+    #for k, v in obj.items():
+    #    tokenized_captions.append(tokenize((k, v)))
     return dict(tokenized_captions)

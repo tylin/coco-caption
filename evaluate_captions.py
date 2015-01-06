@@ -2,6 +2,10 @@
 
 __author__ = 'tylin'
 
+num_threads = 5
+path_to_tokenized_ref_file = 'misc/debug.tokenized_ref.json'
+path_to_raw_hypo_file = 'misc/debug.hypo.json'
+
 from caption_eval.evals import Bleu, Rouge, Meteor, Cider
 import caption_eval.preprocess as preprocess
 
@@ -13,11 +17,10 @@ import caption_eval.preprocess as preprocess
 # =================================================
 import json
 print 'loading tokenized references...'
-tokenized_refs = json.load(open('misc/tokenized_ref.json'))
+tokenized_refs = json.load(open(path_to_tokenized_ref_file, 'r'))
 
 print 'loading raw hypotheses...'
-raw_hpyos = json.load(open('misc/hypo.json'))
-
+raw_hypos = json.load(open(path_to_raw_hypo_file, 'r'))
 
 
 # =================================================
@@ -26,9 +29,9 @@ raw_hpyos = json.load(open('misc/hypo.json'))
 #        for testing captions, it is an array of object with key (image id) and value (list of captions).
 # OUTPUT: normalized captions in python object with key (image id) and value (list of words)
 # =================================================
-print 'normalizing test captions, process %d captions...'%(len(tests_raw))
-tests = preprocess.normalize_captions(tests_raw)
-print 'all captions have been tokenized as a list of words'
+print 'tokenizing hypothese, process %d captions...'%(len(raw_hypos))
+tokenized_hypos = preprocess.tokenize_captions(raw_hypos, num_threads)
+print 'all captions have been tokenized'
 
 # =================================================
 # Evaluation
@@ -47,5 +50,5 @@ print 'all captions have been tokenized as a list of words'
 #         Cider()]
 evals = [Bleu()]
 for eval in evals:
-    s = eval.compute_score(tests, refs)
+    s = eval.compute_score(tokenized_hypos, tokenized_refs)
     print "%s score: %0.2f"%(eval.method(), s)
