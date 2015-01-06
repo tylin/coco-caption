@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 __author__ = 'tylin'
 
 from caption_eval.evals import Bleu, Rouge, Meteor, Cider
@@ -10,24 +12,22 @@ import caption_eval.preprocess as preprocess
 #
 # =================================================
 import json
-print 'loading test captions...'
-tests_raw = json.load(open('misc/sentence_test.json'))
-print 'loading reference captions...'
-refs_raw = json.load(open('misc/sentence_ref.json'))
+print 'loading tokenized references...'
+tokenized_refs = json.load(open('misc/tokenized_ref.json'))
+
+print 'loading raw hypotheses...'
+raw_hpyos = json.load(open('misc/hypo.json'))
 
 
 
 # =================================================
 # Preprocessing Data
 # INPUT: list of captions
-#        for testing captions, it is an array of object with key (image id) and value (single caption).
 #        for testing captions, it is an array of object with key (image id) and value (list of captions).
 # OUTPUT: normalized captions in python object with key (image id) and value (list of words)
 # =================================================
 print 'normalizing test captions, process %d captions...'%(len(tests_raw))
 tests = preprocess.normalize_captions(tests_raw)
-print 'normalizing refs captions, process %d captions...'%(sum(map(lambda x: len(x[1][0]), refs_raw.items())))
-refs = preprocess.normalize_captions(refs_raw)
 print 'all captions have been tokenized as a list of words'
 
 # =================================================
@@ -41,10 +41,11 @@ print 'all captions have been tokenized as a list of words'
 #   method = eval.method()
 #       show name of eval method
 # =================================================
-evals = [Bleu(),
-         Meteor(),
-         Rouge(),
-         Cider()]
+#evals = [Bleu(),
+#         Meteor(),
+#         Rouge(),
+#         Cider()]
+evals = [Bleu()]
 for eval in evals:
     s = eval.compute_score(tests, refs)
     print "%s score: %0.2f"%(eval.method(), s)
