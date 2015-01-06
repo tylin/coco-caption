@@ -22,16 +22,13 @@ def precook(s, n=4, out=False):
     """Takes a string as input and returns an object that can be given to
     either cook_refs or cook_test. This is optional: cook_refs and cook_test
     can take string arguments as well."""
-    if type(s) is str:
-        words = s.split()
-        counts = defaultdict(int)
-        for k in xrange(1,n+1):
-            for i in xrange(len(words)-k+1):
-                ngram = tuple(words[i:i+k])
-                counts[ngram] += 1
-        return (len(words), counts)
-    else:
-        return s
+    words = s.split()
+    counts = defaultdict(int)
+    for k in xrange(1,n+1):
+        for i in xrange(len(words)-k+1):
+            ngram = tuple(words[i:i+k])
+            counts[ngram] += 1
+    return (len(words), counts)
 
 def cook_refs(refs, eff=None, n=4): ## lhuang: oracle will call with "average"
     '''Takes a list of reference sentences for a single segment
@@ -164,7 +161,6 @@ class BleuScorer(object):
 
         if type(other) is tuple:
             ## avoid creating new BleuScorer instances
-            print other
             self.cook_append(other[0], other[1])
         else:
             assert self.compatible(other), "incompatible BLEUs."

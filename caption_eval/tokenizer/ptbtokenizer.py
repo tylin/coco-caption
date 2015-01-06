@@ -7,7 +7,7 @@
 # Usage :
 #
 # Creation Date : 29-12-2014
-# Last Modified : Tue Jan  6 13:12:47 2015
+# Last Modified : Tue 06 Jan 2015 01:19:12 PM PST
 # Author : Hao Fang
 
 import os
@@ -35,5 +35,5 @@ class PTBTokenizer:
         p_echo.stdout.close()
         # not include the '\n' at the end 
         # do not use rstrip in case '\n' is in the str
-        tokens = p_tokenizer.communicate()[0]#[:-1]
+        tokens = p_tokenizer.communicate()[0][:-1]
         return tokens
