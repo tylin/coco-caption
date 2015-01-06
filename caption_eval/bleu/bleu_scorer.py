@@ -1,21 +1,21 @@
 #!/usr/bin/env python
 
-# bleu.py
+# bleu_scorer.py
 # David Chiang <chiang@isi.edu>
-# Modified: Hao Fang
 
 # Copyright (c) 2004-2006 University of Maryland. All rights
 # reserved. Do not redistribute without permission from the
 # author. Not for commercial use.
+
+# Modified by: Hao Fang <hfang@uw.edu>
 
 '''Provides:
 cook_refs(refs, n=4): Transform a list of reference sentences as strings into a form usable by cook_test().
 cook_test(test, refs, n=4): Transform a test sentence as a string (together with the cooked reference sentences) into a form usable by score_cooked().
 '''
 
-import optparse
 import copy
-import sys, math, re, xml.sax.saxutils
+import sys, math, re
 from collections import defaultdict
 
 def precook(s, n=4, out=False):
@@ -83,14 +83,16 @@ def cook_test(test, (reflen, refmaxcounts), eff=None, n=4):
 
     return result
 
-class Bleu(object):
+class BleuScorer(object):
+    """Bleu scorer.
+    """
 
     __slots__ = "n", "crefs", "ctest", "_score", "_ratio", "_testlen", "_reflen", "special_reflen"
     # special_reflen is used in oracle (proportional effective ref len for a node).
 
     def copy(self):
         ''' copy the refs.'''
-        new = Bleu(n=self.n)
+        new = BleuScorer(n=self.n)
         new.ctest = copy.copy(self.ctest)
         new.crefs = copy.copy(self.crefs)
         new._score = None
@@ -161,7 +163,8 @@ class Bleu(object):
         '''add an instance (e.g., from another sentence).'''
 
         if type(other) is tuple:
-            ## avoid creating new Bleu instances
+            ## avoid creating new BleuScorer instances
+            print other
             self.cook_append(other[0], other[1])
         else:
             assert self.compatible(other), "incompatible BLEUs."
@@ -172,7 +175,7 @@ class Bleu(object):
         return self        
 
     def compatible(self, other):
-        return isinstance(other, Bleu) and self.n == other.n
+        return isinstance(other, BleuScorer) and self.n == other.n
 
     def single_reflen(self, option="average"):
         return self._single_reflen(self.crefs[0][0], option)
@@ -246,52 +249,3 @@ class Bleu(object):
         self._score = bleu
         self._ratio = ratio
         return self._score
-
-if __name__ == "__main__":
-    import itertools
-
-    verbose = 2
-    path_to_ref_file = 'misc/data_preparation/tokenized_ref.txt'
-    path_to_hypo_file = 'misc/data_preparation/tokenized_hypo.txt'
-
-    num_refs_per_hypo = 4
-    bleus = Bleu()
-
-    ## STEP 0: READ IN TESTS
-    testlines = []
-    for line in open(path_to_hypo_file, 'r'):
-        testlines.append(line.rstrip())
-
-    ## STEP 1: READ IN REFS
-    refs = []
-    ref_file = open(path_to_ref_file, 'r')
-    for i, line in enumerate(ref_file):
-        if i % num_refs_per_hypo == 0:
-            refs.append([])
-        refs[-1].append(line.rstrip())
-
-    ## STEP 2: COOK TESTS
-    for i, (testline, ref) in enumerate(zip(testlines, refs), 1):
-        bleus += (testline, ref)
-
-    ## STEP 3: EVALUATE (with effective ref len)
-    bleu = bleus.compute_score(option='closest', verbose=verbose)
-    ratio = bleus.ratio()
-    print >> sys.stderr, \
-            "bleu%s = %.4lf, length_ratio = %.2lf (%d sentences, length option \"%s\")" \
-            % ("+1" if bleus.size() == 1 else "", bleu, ratio, bleus.size(), \
-            'closest')
-
-    #bleu = bleus.recompute_score(option='average', verbose=verbose)
-    #ratio = bleus.ratio()
-    #print >> sys.stderr, \
-    #        "bleu%s = %.4lf, length_ratio = %.2lf (%d sentences, length option \"%s\")" \
-    #        % ("+1" if bleus.size() == 1 else "", bleu, ratio, bleus.size(), \
-    #        'average')
-
-    #bleu = bleus.recompute_score(option='shortest', verbose=verbose)
-    #ratio = bleus.ratio()
-    #print >> sys.stderr, \
-    #        "bleu%s = %.4lf, length_ratio = %.2lf (%d sentences, length option \"%s\")" \
-    #        % ("+1" if bleus.size() == 1 else "", bleu, ratio, bleus.size(), \
-    #        'shortest')

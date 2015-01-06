@@ -32,6 +32,7 @@ raw_hypos = json.load(open(path_to_raw_hypo_file, 'r'))
 print 'tokenizing hypothese, process %d captions...'%(len(raw_hypos))
 tokenized_hypos = preprocess.tokenize_captions(raw_hypos, num_threads)
 print 'all captions have been tokenized'
+print tokenized_hypos
 
 # =================================================
 # Evaluation
