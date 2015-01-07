@@ -7,7 +7,7 @@
 # Usage :
 #
 # Creation Date : 29-12-2014
-# Last Modified : Tue Jan  6 21:36:27 2015
+# Last Modified : Tue Jan  6 22:34:06 2015
 # Author : Hao Fang
 
 import os
@@ -31,6 +31,7 @@ class PTBTokenizer:
         for k, v in captions_for_image.iteritems():
             tokenized_captions_for_image[k] = []
             idx_c = 0
+            assert(type(v) is list)
             for c in v:
                 tokenized_captions_for_image[k].append([])
                 idx_s = 0

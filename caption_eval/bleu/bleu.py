@@ -7,7 +7,7 @@
 # Usage :
 #
 # Creation Date : 06-01-2015
-# Last Modified : Tue Jan  6 21:48:02 2015
+# Last Modified : Tue Jan  6 22:34:41 2015
 # Author : Hao Fang
 
 from bleu_scorer import BleuScorer
@@ -23,8 +23,16 @@ class Bleu:
 
         bleu_scorer = BleuScorer()
         for i in images:
-            assert(len(hypo_for_image[i]) == 1)
-            bleu_scorer += (hypo_for_image[i][0], ref_for_image[i])
+            hypo = hypo_for_image[i]
+            ref = ref_for_image[i]
+
+            # Sanity check.
+            assert(type(hypo) is list)
+            assert(len(hypo) == 1)
+            assert(type(ref) is list)
+            assert(len(ref) > 0)
+
+            bleu_scorer += (hypo[0], ref)
 
         bleu, bleu_info = bleu_scorer.compute_score(option='shortest')
 
