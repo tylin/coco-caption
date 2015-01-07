@@ -7,30 +7,34 @@
 # Usage :
 #
 # Creation Date : 06-01-2015
-# Last Modified : Tue Jan  6 17:35:45 2015
+# Last Modified : Tue Jan  6 21:47:15 2015
 # Author : Hao Fang
 
 import os
 
-path_to_tokenized_ref_txt = 'data/tokenized_ref.txt'
-path_to_raw_hypo_txt = 'data/hypo.txt'
-# should be changed to 5 later
-num_refs_per_hypo = int(4)
-
-path_to_tokenized_hypo_txt = 'var/tokenized_hypo.txt'
+path_to_tokenized_ref_json = 'data/tokenized_ref.json'
+path_to_raw_hypo_json = 'data/hypo.json'
 
 from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor, Cider
+
+# =================================================
+# Load references
+# =================================================
+import json
+tokenized_ref_for_image = json.load(open(path_to_tokenized_ref_json))
 
 # =================================================
 # Tokenize hypotheses
 # =================================================
 print 'tokenizing hypothese...'
+raw_hypo_for_image = json.load(open(path_to_raw_hypo_json))
 tokenizer = PTBTokenizer()
-token_lines = tokenizer.tokenize(open(path_to_raw_hypo_txt))
-outfile = open(path_to_tokenized_hypo_txt, 'w')
-for line in token_lines:
-    outfile.write(line + '\n')
-outfile.close()
+tokenized_hypo_for_image= tokenizer.tokenize(raw_hypo_for_image)
+keys1 = tokenized_hypo_for_image.keys() 
+keys1.sort()
+keys2 = tokenized_ref_for_image.keys()
+keys2.sort()
+assert(keys1 == keys2)
 print 'all hypothese have been tokenized'
 
 # =================================================
@@ -39,9 +43,8 @@ print 'all hypothese have been tokenized'
 # Also provides n-gram precision w/o brevity penalty (This is NOT Bleu)
 # =================================================
 scorer = Bleu()
-score, bleu_info = scorer.compute_score(open(path_to_tokenized_hypo_txt), \
-        open(path_to_tokenized_ref_txt), \
-        num_refs_per_hypo)
+score, bleu_info = scorer.compute_score(tokenized_hypo_for_image, \
+        tokenized_ref_for_image)
 print 'Bleu: ', score
 print 'Bleu info: ', bleu_info
 
@@ -49,9 +52,8 @@ print 'Bleu info: ', bleu_info
 # Compute Meteor
 # =================================================
 scorer = Meteor()
-score = scorer.compute_score(open(path_to_tokenized_hypo_txt), \
-        open(path_to_tokenized_ref_txt), \
-        num_refs_per_hypo)
+score = scorer.compute_score(tokenized_hypo_for_image, \
+        tokenized_ref_for_image)
 print 'Meteor: ', score
 
 #...
