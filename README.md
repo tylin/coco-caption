@@ -26,3 +26,7 @@ Every 5 lines of tokenized_ref.txt are the references for a line in id.txt.
 - meteor: Meteor evaluation codes
 - rouge: Rouge evaluation codes
 - cidr: Cidr evaluation codes
+
+./var: This is a folder to put files created by the scripts.
+
+./misc: Miscellaneous files and scripts.

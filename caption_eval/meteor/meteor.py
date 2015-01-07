@@ -6,25 +6,45 @@ import subprocess
 import threading
 
 # Assumes meteor-1.5.jar is in the same directory as meteor.py.  Change as needed.
-METEOR_JAR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'meteor-1.5.jar')
-print METEOR_JAR
+METEOR_JAR = 'meteor-1.5.jar'
+# print METEOR_JAR
+
 class Meteor:
 
     def __init__(self):
-        self.meteor_cmd = ['java', '-jar', '-Xmx2G', METEOR_JAR, '-', '-', '-stdio']
-        self.meteor_p = subprocess.Popen(self.meteor_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        self.meteor_cmd = ['java', '-jar', '-Xmx2G', METEOR_JAR, \
+                '-', '-', '-stdio', '-l', 'en', '-norm']
+        self.meteor_p = subprocess.Popen(self.meteor_cmd, \
+                cwd=os.path.dirname(os.path.abspath(__file__)), \
+                stdin=subprocess.PIPE, \
+                stdout=subprocess.PIPE, \
+                stderr=subprocess.PIPE)
         # Used to guarantee thread safety
         self.lock = threading.Lock()
-        print "TODO: testing meteor"
 
-    def compute_score(self, test, ref):
-        print "COMPUTE_SCORE HASN'T BEEN DEFINED"
-        return -1.00
+    def compute_score(self, hypo_txt_file, ref_txt_file, num_refs_per_hypo):
+        hypo_lines = []
+        for line in hypo_txt_file:
+            hypo_lines.append(line.rstrip())
+        
+        ref_lines = []
+        for i, line in enumerate(ref_txt_file):
+            if i % num_refs_per_hypo == 0:
+                ref_lines.append([])
+            ref_lines[-1].append(line.rstrip())
+
+        scores = []
+        for (h, r) in zip(hypo_lines, ref_lines):
+            # TODO: get score? not sure if it is correct.
+            scores.append(self._score(h, r))
+
+        return -1
+
 
     def method(self):
         return "METEOR"
 
-    def score(self, hypothesis_str, reference_list):
+    def _score(self, hypothesis_str, reference_list):
         self.lock.acquire()
         # SCORE ||| reference 1 words ||| reference n words ||| hypothesis words
         score_line = ' ||| '.join(('SCORE', ' ||| '.join(reference_list), hypothesis_str))
@@ -42,13 +62,3 @@ class Meteor:
         self.meteor_p.stdin.close()
         self.meteor_p.wait()
         self.lock.release()
-
-# # Test the above class
-# meteor = Meteor()
-# # 1.0
-# print meteor.score('this scores perfectly .', ['this scores perfectly .'])
-# # 1.0
-# print meteor.score('this also scores perfectly .', ['this scores badly .', 'this also scores perfectly .'])
-# # 0.0484848484848
-# print meteor.score('this scores badly .', ['this isn \'t the text you \'re looking for .'])
-# meteor.close()
