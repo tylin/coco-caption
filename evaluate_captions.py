@@ -7,13 +7,14 @@
 # Usage :
 #
 # Creation Date : 06-01-2015
-# Last Modified : Tue Jan  6 17:25:55 2015
+# Last Modified : Tue Jan  6 17:35:45 2015
 # Author : Hao Fang
 
 import os
 
 path_to_tokenized_ref_txt = 'data/tokenized_ref.txt'
 path_to_raw_hypo_txt = 'data/hypo.txt'
+# should be changed to 5 later
 num_refs_per_hypo = int(4)
 
 path_to_tokenized_hypo_txt = 'var/tokenized_hypo.txt'
