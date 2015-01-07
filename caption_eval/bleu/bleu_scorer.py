@@ -191,8 +191,7 @@ class BleuScorer(object):
 
     def recompute_score(self, option=None, verbose=0):
         self._score = None
-        self.compute_score(option, verbose)
-        return self._score
+        return self.compute_score(option, verbose)
         
     def compute_score(self, option=None, verbose=0):
         if self._score is not None:
@@ -224,9 +223,9 @@ class BleuScorer(object):
                     totalcomps[key][k] += comps[key][k]
             if verbose > 1:
                 print comps, reflen
+        totalcomps['reflen'] = self._reflen
+        totalcomps['testlen'] = self._testlen
         if verbose > 0:
-            totalcomps['reflen'] = self._reflen
-            totalcomps['testlen'] = self._testlen
             print totalcomps
 
         bleu = 1.
@@ -244,4 +243,4 @@ class BleuScorer(object):
 
         self._score = bleu
         self._ratio = ratio
-        return self._score
+        return (self._score, totalcomps)
