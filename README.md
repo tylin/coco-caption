@@ -23,6 +23,4 @@ Evaluation codes for mscoco caption generation.
 - rouge: Rouge evaluation codes
 - cidr: Cidr evaluation codes
 
-./var: This is a folder to put files created by the scripts.
-
 ./misc: Miscellaneous files and scripts.
