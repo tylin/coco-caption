@@ -56,4 +56,18 @@ score = scorer.compute_score(tokenized_hypo_for_image, \
         tokenized_ref_for_image)
 print 'Meteor: ', score
 
-#...
+# =================================================
+# Compute Rouge-L
+# =================================================
+scorer = Rouge();
+score = scorer.compute_score(tokenized_hypo_for_image, \
+		tokenized_ref_for_image)
+print 'Rouge: ', score
+# =================================================
+# Compute CIDEr
+# =================================================
+scorer = Cider();
+score = scorer.compute_score(tokenized_hypo_for_image, \
+		tokenized_ref_for_image)
+print 'CIDEr: ', score
+
