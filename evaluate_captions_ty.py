@@ -3,7 +3,7 @@
 # =================================================
 # Specify file path
 # =================================================
-path_to_tokenized_ref_json = 'data/tokenized_ref.json'
+path_to_tokenized_ref_json = 'data/tokenized_ref.nopunc.json'
 path_to_raw_hypo_json = 'data/hypo.json'
 
 # from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor, Cider

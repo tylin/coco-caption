@@ -7,12 +7,12 @@
 # Usage :
 #
 # Creation Date : 06-01-2015
-# Last Modified : Mon Feb  2 11:51:49 2015
+# Last Modified : Mon 02 Feb 2015 12:07:23 PM PST
 # Author : Hao Fang
 
 import os
 
-path_to_tokenized_ref_json = 'data/tokenized_ref.json'
+path_to_tokenized_ref_json = 'data/tokenized_ref.nopunc.json'
 path_to_raw_hypo_json = 'data/hypo.json'
 
 # from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor, Cider
