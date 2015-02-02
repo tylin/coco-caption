@@ -15,7 +15,8 @@ import os
 path_to_tokenized_ref_json = 'data/tokenized_ref.json'
 path_to_raw_hypo_json = 'data/hypo.json'
 
-from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor, Cider
+# from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor, Cider
+from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor
 
 # =================================================
 # Load references
@@ -43,10 +44,12 @@ print 'all hypothese have been tokenized'
 # Also provides n-gram precision w/o brevity penalty (This is NOT Bleu)
 # =================================================
 scorer = Bleu()
-score, bleu_info = scorer.compute_score(tokenized_hypo_for_image, \
+score = scorer.compute_score(tokenized_hypo_for_image, \
         tokenized_ref_for_image)
+# score, bleu_info = scorer.compute_score(tokenized_hypo_for_image, \
+#         tokenized_ref_for_image)
 print 'Bleu: ', score
-print 'Bleu info: ', bleu_info
+# print 'Bleu info: ', bleu_info
 
 # =================================================
 # Compute Meteor
@@ -63,11 +66,11 @@ scorer = Rouge();
 score = scorer.compute_score(tokenized_hypo_for_image, \
 		tokenized_ref_for_image)
 print 'Rouge: ', score
-# =================================================
-# Compute CIDEr
-# =================================================
-scorer = Cider();
-score = scorer.compute_score(tokenized_hypo_for_image, \
-		tokenized_ref_for_image)
-print 'CIDEr: ', score
+# # =================================================
+# # Compute CIDEr
+# # =================================================
+# scorer = Cider();
+# score = scorer.compute_score(tokenized_hypo_for_image, \
+# 		tokenized_ref_for_image)
+# print 'CIDEr: ', score
 

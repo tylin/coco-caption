@@ -14,6 +14,9 @@ from bleu_scorer import BleuScorer
 
 
 class Bleu:
+    def __init__(self, n=4):
+        self._n = n
+
     def compute_score(self, hypo_for_image, ref_for_image):
         images = hypo_for_image.keys()
         images.sort()
@@ -21,7 +24,7 @@ class Bleu:
         tmp_images.sort()
         assert(images == tmp_images)
 
-        bleu_scorer = BleuScorer()
+        bleu_scorer = BleuScorer(n=self._n)
         for i in images:
             hypo = hypo_for_image[i]
             ref = ref_for_image[i]
@@ -36,7 +39,8 @@ class Bleu:
 
         bleu, bleu_info = bleu_scorer.compute_score(option='shortest')
 
-        return (bleu, bleu_info)
+        # return (bleu, bleu_info)
+        return bleu
 
     def method(self):
         return "Bleu"
