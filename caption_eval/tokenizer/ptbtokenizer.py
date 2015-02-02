@@ -2,12 +2,12 @@
 # 
 # File Name : ptbtokenizer.py
 #
-# Description :
+# Description : Do the PTB Tokenization and remove punctuations.
 #
 # Usage :
 #
 # Creation Date : 29-12-2014
-# Last Modified : Tue Jan  6 22:34:06 2015
+# Last Modified : Mon Feb  2 11:51:12 2015
 # Author : Hao Fang
 
 import os
@@ -16,6 +16,9 @@ import subprocess
 
 STANFORD_CORENLP_3_4_1_JAR = 'stanford-corenlp-3.4.1.jar'
 #print STANFORD_CORENLP_3_4_1_JAR
+
+PUNCTUATIONS = ["''", "'", "``", "`", "-LRB-", "-RRB-", "-LCB-", "-RCB-", \
+        ".", "?", "!", ",", ":", "-", "--", "...", ";"] 
 
 class PTBTokenizer:
     """Python wrapper of Stanford PTBTokenizer"""
@@ -52,7 +55,9 @@ class PTBTokenizer:
         idx = 0
         for line in token_lines.split('\n'):
             k, idx_c, idx_s = images[idx]
-            tokenized_captions_for_image[k][idx_c][idx_s] = line.rstrip()
+            tokenized_caption = ' '.join([w for w in line.rstrip().split(' ') \
+                    if w not in PUNCTUATIONS])
+            tokenized_captions_for_image[k][idx_c][idx_s] = tokenized_caption
             idx += 1
 
         final_tokenized_captions_for_image = dict()
