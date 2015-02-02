@@ -35,7 +35,7 @@ class Meteor:
             # TODO: get score? not sure if it is correct.
             scores.append(self._score(hypo_for_image[i][0], ref_for_image[i]))
 
-        return -1
+        return sum(scores)/len(scores)
 
 
     def method(self):
