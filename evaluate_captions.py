@@ -49,15 +49,14 @@ score = scorer.compute_score(tokenized_hypo_for_image, \
 # score, bleu_info = scorer.compute_score(tokenized_hypo_for_image, \
 #         tokenized_ref_for_image)
 print 'Bleu: ', score
-# print 'Bleu info: ', bleu_info
 
 # =================================================
 # Compute Meteor
 # =================================================
-scorer = Meteor()
-score = scorer.compute_score(tokenized_hypo_for_image, \
-        tokenized_ref_for_image)
-print 'Meteor: ', score
+# scorer = Meteor()
+# score = scorer.compute_score(tokenized_hypo_for_image, \
+#         tokenized_ref_for_image)
+# print 'Meteor: ', score
 
 # =================================================
 # Compute Rouge-L

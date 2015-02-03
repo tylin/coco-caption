@@ -1,15 +1,24 @@
-from nltk.tokenize import wordpunct_tokenize
+from utils import lm_tools
+import pdb
 
-def tokenize(X, context=5, start='<start>', end='<end>'):
-    """
-    Tokenize each of the captions
-    """
-    tokens = [wordpunct_tokenize(x) for x in X]
-    tokens = [ [w.lower() for w in x] for x in tokens ]
-    tokens = [ [is_number(w) for w in x] for x in tokens ]
-    for i, x in enumerate(tokens):
-        tokens[i] = [start] * context + x + [end]
+def split_dataset(dataset):
+    tokens = {}
+    for image in dataset:
+        sents = dataset[image]
+        sp_sents = ();
+        for sent in sents:
+            assert(type("a") == type(sent))
+            sp_sents.append(sent.split())
+        tokens[image] = sp_sents
+
     return tokens
+
+def is_number(s):
+    try:
+        float(s)
+        return '<#>'
+    except ValueError:
+        return s
 
 class Cider:
     '''
@@ -21,7 +30,8 @@ class Cider:
     def compute_score(self, test, ref):
 
         print "inside compute_score"
-        tokens =  tokenize(ref)
+        test_split = split_dataset(test)
+        pdb.set_trace()
         print tokens
         return 1
 
