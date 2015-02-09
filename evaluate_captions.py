@@ -4,9 +4,9 @@
 #
 # Description :
 #
-# Usage :
+# Usage : 
 #
-# Creation Date : 06-01-2015
+# Creation Date : 
 # Last Modified : Mon 02 Feb 2015 12:07:23 PM PST
 # Author : Hao Fang
 
@@ -15,8 +15,7 @@ import os
 path_to_tokenized_ref_json = 'data/tokenized_ref.nopunc.json'
 path_to_raw_hypo_json = 'data/hypo.json'
 
-# from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor, Cider
-from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor
+from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor, Cider
 
 # =================================================
 # Load references
@@ -43,33 +42,33 @@ print 'all hypothese have been tokenized'
 # - using 'shortest' reference length as brevity penalty
 # Also provides n-gram precision w/o brevity penalty (This is NOT Bleu)
 # =================================================
-scorer = Bleu()
-score = scorer.compute_score(tokenized_hypo_for_image, \
-        tokenized_ref_for_image)
-# score, bleu_info = scorer.compute_score(tokenized_hypo_for_image, \
-#         tokenized_ref_for_image)
+ scorer = Bleu()
+ score = scorer.compute_score(tokenized_hypo_for_image, \
+         tokenized_ref_for_image)
+ score, bleu_info = scorer.compute_score(tokenized_hypo_for_image, \
+         tokenized_ref_for_image)
 print 'Bleu: ', score
 
 # =================================================
 # Compute Meteor
 # =================================================
-# scorer = Meteor()
-# score = scorer.compute_score(tokenized_hypo_for_image, \
-#         tokenized_ref_for_image)
-# print 'Meteor: ', score
+ scorer = Meteor()
+ score = scorer.compute_score(tokenized_hypo_for_image, \
+         tokenized_ref_for_image)
+ print 'Meteor: ', score
 
 # =================================================
 # Compute Rouge-L
 # =================================================
-scorer = Rouge();
-score = scorer.compute_score(tokenized_hypo_for_image, \
-		tokenized_ref_for_image)
-print 'Rouge: ', score
+ scorer = Rouge();
+ score = scorer.compute_score(tokenized_hypo_for_image, \
+ 		tokenized_ref_for_image)
+ print 'Rouge: ', score
 # # =================================================
 # # Compute CIDEr
 # # =================================================
-# scorer = Cider();
-# score = scorer.compute_score(tokenized_hypo_for_image, \
-# 		tokenized_ref_for_image)
-# print 'CIDEr: ', score
+scorer = Cider();
+score = scorer.compute_score(tokenized_hypo_for_image, \
+		tokenized_ref_for_image)
+print 'CIDEr: ', score
 
