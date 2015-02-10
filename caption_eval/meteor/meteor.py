@@ -23,23 +23,31 @@ class Meteor:
         self.lock = threading.Lock()
 
     def compute_score(self, hypo_for_image, ref_for_image):
+        self.lock.acquire()
         images = hypo_for_image.keys()
         images.sort()
         tmp_images = ref_for_image.keys()
         tmp_images.sort()
         assert(images == tmp_images)
 
-        scores = []
+        eval_line = 'EVAL'
         for i in images:
             assert(len(hypo_for_image[i]) == 1)
-            # TODO: get score? not sure if it is correct.
-            scores.append(self._score(hypo_for_image[i][0], ref_for_image[i]))
+            eval_line += ' ||| {}'.format(self._stat(hypo_for_image[i][0], ref_for_image[i]))
+        self.meteor_p.stdin.write('{}\n'.format(eval_line))
+        score = float(self.meteor_p.stdout.readline().strip())
+        self.lock.release()
 
-        return sum(scores)/len(scores)
-
+        return score
 
     def method(self):
         return "METEOR"
+
+    def _stat(self, hypothesis_str, reference_list):
+        # SCORE ||| reference 1 words ||| reference n words ||| hypothesis words
+        score_line = ' ||| '.join(('SCORE', ' ||| '.join(reference_list), hypothesis_str))
+        self.meteor_p.stdin.write('{}\n'.format(score_line))
+        return self.meteor_p.stdout.readline().strip()
 
     def _score(self, hypothesis_str, reference_list):
         self.lock.acquire()
@@ -48,13 +56,13 @@ class Meteor:
         self.meteor_p.stdin.write('{}\n'.format(score_line))
         stats = self.meteor_p.stdout.readline().strip()
         eval_line = 'EVAL ||| {}'.format(stats)
-        # EVAL ||| stats
+        # EVAL ||| stats 
         self.meteor_p.stdin.write('{}\n'.format(eval_line))
         score = float(self.meteor_p.stdout.readline().strip())
         self.lock.release()
         return score
  
-    def close(self):
+    def __exit__(self):
         self.lock.acquire()
         self.meteor_p.stdin.close()
         self.meteor_p.wait()
