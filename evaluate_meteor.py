@@ -17,7 +17,7 @@ import json
 tokenized_ref_for_image = json.load(open(path_to_tokenized_ref_json))
 
 # =================================================
-# Tokenize hypotheses
+# Tokenize hypothesis
 # =================================================
 print 'tokenizing hypothesis...'
 raw_hypo_for_image = json.load(open(path_to_raw_hypo_json))
