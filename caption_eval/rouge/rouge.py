@@ -51,7 +51,8 @@ class Rouge():
     '''
     def __init__(self):
     	# verify the value of beta - not final yet
-        self.beta = 2.0
+        # updated the value below based on discussion with Hovey
+        self.beta = 1.2
 
     def compute_score(self, test, ref):
         """
