@@ -24,6 +24,6 @@ Evaluation codes for mscoco caption generation.
 - bleu: Bleu evalutation codes
 - meteor: Meteor evaluation codes
 - rouge: Rouge evaluation codes
-- cidr: Cidr evaluation codes
+- cider: CIDEr evaluation codes
 
 ./misc: Miscellaneous files and scripts.
