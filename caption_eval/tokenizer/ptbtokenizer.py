@@ -7,7 +7,7 @@
 # Usage :
 #
 # Creation Date : 29-12-2014
-# Last Modified : Wed Feb 25 13:24:51 2015
+# Last Modified : Wed 25 Feb 2015 01:41:30 PM PST
 # Author : Hao Fang
 
 import os
@@ -53,7 +53,7 @@ class PTBTokenizer:
         print >> sys.stderr, "tokenizing..."
         # Note: need to be called in current directory (using cwd argument)
         path_to_jar_dirname=os.path.dirname(os.path.abspath(__file__))
-        tmp_file = tempfile.TemporaryFile(delete=False, dir=path_to_jar_dirname)
+        tmp_file = tempfile.NamedTemporaryFile(delete=False, dir=path_to_jar_dirname)
         tmp_file.write(sentences)
         tmp_file.close()
         cmd.append(os.path.basename(tmp_file.name))
