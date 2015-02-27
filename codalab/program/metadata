@@ -1,2 +1,0 @@
-command: python $program/eval_captions_coda.py $input $output
-description: Example competition evaluation program.
