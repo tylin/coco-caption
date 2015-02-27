@@ -17,7 +17,7 @@ Evaluation codes for MS COCO caption generation.
 		It can be downloaded from http://mscoco.org/download
 - captions_val2014_submission.json:
         The generated captions for evaluation.
-        It follows the similar format as "annotations" field in COCO annotation:
+        The format is:
 		[{"image_id": int, "caption": str}]
 
 ./caption_eval: This is a folder where all evaluation codes are stored.
