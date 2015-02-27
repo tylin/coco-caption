@@ -1,7 +1,7 @@
-mscoco_caption_eval
+Microsoft COCO Caption Evaluation
 ===================
 
-Evaluation codes for mscoco caption generation.
+Evaluation codes for MS COCO caption generation.
 
 ## REQUIREMENTS ##
 - java 1.8.0
