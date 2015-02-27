@@ -7,12 +7,14 @@
 # Usage :
 #
 # Creation Date : 29-12-2014
-# Last Modified : Mon Feb  2 11:51:12 2015
-# Author : Hao Fang
+# Last Modified : Feb  25  2015
+# Author : Hao Fang and Tsung-Yi Lin
 
 import os
 import sys
 import subprocess
+import tempfile
+import itertools
 
 STANFORD_CORENLP_3_4_1_JAR = 'stanford-corenlp-3.4.1.jar'
 #print STANFORD_CORENLP_3_4_1_JAR
@@ -28,42 +30,40 @@ class PTBTokenizer:
                 'edu.stanford.nlp.process.PTBTokenizer', \
                 '-preserveLines', '-lowerCase']
 
-        tokenized_captions_for_image = dict()
-        images = []
-        sentences = ''
-        for k, v in captions_for_image.iteritems():
-            tokenized_captions_for_image[k] = []
-            idx_c = 0
-            assert(type(v) is list)
-            for c in v:
-                tokenized_captions_for_image[k].append([])
-                idx_s = 0
-                for s in c.split('\n'):
-                    images.append((k, idx_c, idx_s))
-                    idx_s += 1
-                    tokenized_captions_for_image[k][-1].append(None)
-                    sentences += s
-                    sentences += '\n'
-                idx_c += 1
+        # ======================================================
+        # prepare data for PTB Tokenizer
+        # ======================================================
+        final_tokenized_captions_for_image = {}
+        image_id = [k for k, v in captions_for_image.items() for _ in range(len(v))]
+        sentences = '\n'.join([c.replace('\n', ' ') for k, v in captions_for_image.items() for c in v])
 
-        # Note: need to be called in current directory (using cwd argument)
-        p_tokenizer = subprocess.Popen(cmd, \
-                cwd=os.path.dirname(os.path.abspath(__file__)), \
-                stdin=subprocess.PIPE, stdout=subprocess.PIPE, \
-                stderr=subprocess.PIPE)
+        # ======================================================
+        # save sentences to temporary file
+        # ======================================================
+        path_to_jar_dirname=os.path.dirname(os.path.abspath(__file__))
+        tmp_file = tempfile.NamedTemporaryFile(delete=False, dir=path_to_jar_dirname)
+        tmp_file.write(sentences)
+        tmp_file.close()
+
+        # ======================================================
+        # tokenize sentence
+        # ======================================================
+        cmd.append(os.path.basename(tmp_file.name))
+        p_tokenizer = subprocess.Popen(cmd, cwd=path_to_jar_dirname, \
+                stdout=subprocess.PIPE)
         token_lines = p_tokenizer.communicate(input=sentences.rstrip())[0]
-        idx = 0
-        for line in token_lines.split('\n'):
-            k, idx_c, idx_s = images[idx]
+        lines = token_lines.split('\n')
+        # remove temp file
+        os.remove(tmp_file.name)
+
+        # ======================================================
+        # create dictionary for tokenized captions
+        # ======================================================
+        for k, line in zip(image_id, lines):
+            if not k in final_tokenized_captions_for_image:
+                final_tokenized_captions_for_image[k] = []
             tokenized_caption = ' '.join([w for w in line.rstrip().split(' ') \
                     if w not in PUNCTUATIONS])
-            tokenized_captions_for_image[k][idx_c][idx_s] = tokenized_caption
-            idx += 1
-
-        final_tokenized_captions_for_image = dict()
-        for k, v in tokenized_captions_for_image.iteritems():
-            final_tokenized_captions_for_image[k] = []
-            for c in v:
-                final_tokenized_captions_for_image[k].append('\n'.join(c))
+            final_tokenized_captions_for_image[k].append(tokenized_caption)
 
         return final_tokenized_captions_for_image

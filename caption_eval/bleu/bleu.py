@@ -15,9 +15,13 @@ from bleu_scorer import BleuScorer
 
 class Bleu:
     def __init__(self, n=4):
+        # default compute Blue score up to 4
         self._n = n
+        self._hypo_for_image = {}
+        self.ref_for_image = {}
 
     def compute_score(self, hypo_for_image, ref_for_image):
+
         images = hypo_for_image.keys()
         images.sort()
         tmp_images = ref_for_image.keys()

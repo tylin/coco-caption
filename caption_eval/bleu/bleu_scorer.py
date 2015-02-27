@@ -199,7 +199,7 @@ class BleuScorer(object):
 
         if option is None:
             option = "average" if len(self.crefs) == 1 else "closest"
-            
+
         n = self.n
 
         self._testlen = 0
@@ -228,19 +228,30 @@ class BleuScorer(object):
         if verbose > 0:
             print totalcomps
 
-        bleu = 1.
         small = 1e-9
         tiny = 1e-15 ## so that if guess is 0 still return 0
-        for k in xrange(n): 
-            bleu *= float(totalcomps['correct'][k] + tiny ) \
-                    / (totalcomps['guess'][k] + small)
-        bleu = bleu ** (1./n)
 
-        ## smoothing: single-sentence effect on the whole doc
-        ratio = (self._testlen + tiny) / (self._reflen + small) ## N.B.: avoid zero division
-        if ratio < 1: #0 < totalcomps['testlen'] < totalcomps['reflen']:        
-            bleu *= math.exp(1-1/ratio)
+        bleus = []
+        for nn in range(1,n+1):
+            bleu = 1.
+            for k in xrange(nn):
+                bleu *= float(totalcomps['correct'][k] + tiny ) \
+                        / (totalcomps['guess'][k] + small)
+            bleus.append(bleu ** (1./nn))
+            ratio = (self._testlen + tiny) / (self._reflen + small) ## N.B.: avoid zero division
+            if ratio < 1: #0 < totalcomps['testlen'] < totalcomps['reflen']:
+                bleus[nn-1] *= math.exp(1-1/ratio)
+        # for k in xrange(n):
+        #     bleu *= float(totalcomps['correct'][k] + tiny ) \
+        #             / (totalcomps['guess'][k] + small)
+        # bleu = bleu ** (1./n)
+        #
+        # ## smoothing: single-sentence effect on the whole doc
+        # ratio = (self._testlen + tiny) / (self._reflen + small) ## N.B.: avoid zero division
+        # if ratio < 1: #0 < totalcomps['testlen'] < totalcomps['reflen']:
+        #     bleu *= math.exp(1-1/ratio)
 
-        self._score = bleu
-        self._ratio = ratio
+        self._score = bleus
+        # self._score = bleu
+        # self._ratio = ratio
         return (self._score, totalcomps)
