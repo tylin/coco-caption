@@ -12,18 +12,19 @@ Evaluation codes for mscoco caption generation.
 - evaluate_caption.py: demo script
 
 ./data
-- hypo.json: uploaded hypothese (un-tokenized)
-		{'image_id', [caption]}
-		the value has to be a list of length 1
-- tokenized_ref.json: tokenized references
-		{'image_id', [caption, ...]}
+- captions_val2014.json
+		The caption annotations of COCO2014 validation set.
+		It can be downloaded from http://mscoco.org/download
+- captions_val2014_submission.json:
+        The generated captions for evaluation.
+        It follow the similar format as "annotations" field in COCO annotation:
+		[{"image_id": int, "caption": str}]
 
 ./caption_eval: This is a folder where all evaluation codes are stored.
 - evals.py: includes Python classes of different methods.
+- utils.py: utility functions for parsing data.
 - tokenizer: PTBTokenizer
 - bleu: Bleu evalutation codes
 - meteor: Meteor evaluation codes
 - rouge: Rouge evaluation codes
 - cider: CIDEr evaluation codes
-
-./misc: Miscellaneous files and scripts.

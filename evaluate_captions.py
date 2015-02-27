@@ -13,20 +13,23 @@ __version__ = 1.0
 # Following shows the data format for submitting to the evaluation server.
 
 # File name: captions_[split]_submission.json, e.g., captions_val2014_submission.json
-# The annotation format is:
-# {
+# The submission file format is an array of object:
+# [{
 #   "image_id": int,
 #   "caption": str,
-# }
+# }]
 #
-# Authors: Xinlei Chen          (CMU),
-#          Hao Feng             (Univ. of Washington),
-#          Tsung-Yi Lin         (Cornell),
-#          Ramakrishna Vedantam (Virginia Tech)
+#
+# Microsoft COCO caption evaluation Toolbox.      Version 1.0
+# Data, paper, and tutorials available at:  http://mscoco.org/
+# Code written by:  Xinlei Chen          (CMU)
+#                   Hao Feng             (Univ. of Washington)
+#                   Tsung-Yi Lin         (Cornell)
+#                   Ramakrishna Vedantam (Virginia Tech)
+# Licensed under the Simplified BSD License [see bsd.txt]
 
 from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor, Cider
 from caption_eval.util import pack_coco_annotations, pack_coco_submission
-
 
 # =================================================
 # specify the path to reference caption file and
