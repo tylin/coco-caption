@@ -1,16 +1,8 @@
-__author__ = 'tylin'
-
 #!/usr/bin/env python
 # Tsung-Yi Lin <tl483@cornell.edu>
 # Ramakrishna Vedantam <vrama91@vt.edu>
 
-'''Provides:
-cook_refs(refs, n=4): Transform a list of reference sentences as strings into a form usable by cook_test().
-cook_test(test, refs, n=4): Transform a test sentence as a string (together with the cooked reference sentences) into a form usable by score_cooked().
-'''
-
 import copy
-import sys, math, re
 from collections import defaultdict
 import numpy as np
 
@@ -29,9 +21,9 @@ def precook(s, n=4, out=False):
         for i in xrange(len(words)-k+1):
             ngram = tuple(words[i:i+k])
             counts[ngram] += 1
-    return (len(words), counts)
+    return counts
 
-def cook_refs(refs, eff=None, n=4): ## lhuang: oracle will call with "average"
+def cook_refs(refs, n=4): ## lhuang: oracle will call with "average"
     '''Takes a list of reference sentences for a single segment
     and returns an object that encapsulates everything that BLEU
     needs to know about them.
@@ -39,25 +31,16 @@ def cook_refs(refs, eff=None, n=4): ## lhuang: oracle will call with "average"
     :param n: int : number of ngrams for which (ngram) representation is calculated
     :return: result (list of dict)
     '''
-    result = []
-    for ref in refs:
-        rl, counts = precook(ref, n)
-        result.append(counts)
-    return result
+    return [precook(ref, n) for ref in refs]
 
-def cook_test(test, eff=None, n=4):
+def cook_test(test, n=4):
     '''Takes a test sentence and returns an object that
     encapsulates everything that BLEU needs to know about it.
     :param test: list of string : hypothesis sentence for some image
     :param n: int : number of ngrams for which (ngram) representation is calculated
     :return: result (dict)
     '''
-    testlen, counts = precook(test, n, True)
-
-    result = {}
-    result = counts
-
-    return result
+    return precook(test, n, True)
 
 class CiderScorer(object):
     """CIDEr scorer.
@@ -86,8 +69,7 @@ class CiderScorer(object):
         '''called by constructor and __iadd__ to avoid creating new instances.'''
 
         if refs is not None:
-            tmp = cook_refs(refs)
-            self.crefs.append(tmp)
+            self.crefs.append(cook_refs(refs))
             if test is not None:
                 cooked_test = cook_test(test)
                 self.ctest.append(cooked_test) ## N.B.: -1
