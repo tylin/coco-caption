@@ -155,7 +155,7 @@ class CiderScorer(object):
         def sim(vec_hyp, vec_ref, norm_hyp, norm_ref, length_hyp, length_ref):
             '''
             Compute the cosine similarity of two vectors.
-            :param vec_cand: array of dictionary for vector corresponding to hypothesis
+            :param vec_hyp: array of dictionary for vector corresponding to hypothesis
             :param vec_ref: array of dictionary for vector corresponding to reference
             :param norm_hyp: array of float for vector corresponding to hypothesis
             :param norm_ref: array of float for vector corresponding to reference
