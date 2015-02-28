@@ -51,12 +51,10 @@ class CiderScorer(object):
         new = CiderScorer(n=self.n)
         new.ctest = copy.copy(self.ctest)
         new.crefs = copy.copy(self.crefs)
-        new._score = None
         return new
 
     def __init__(self, test=None, refs=None, n=4, sigma=6.0):
         ''' singular instance '''
-
         self.n = n
         self.sigma = sigma
         self.crefs = []
@@ -71,12 +69,9 @@ class CiderScorer(object):
         if refs is not None:
             self.crefs.append(cook_refs(refs))
             if test is not None:
-                cooked_test = cook_test(test)
-                self.ctest.append(cooked_test) ## N.B.: -1
+                self.ctest.append(cook_test(test)) ## N.B.: -1
             else:
                 self.ctest.append(None) # lens of crefs and ctest have to match
-
-        self._score = None ## need to recompute
 
     def size(self):
         assert len(self.crefs) == len(self.ctest), "refs/test mismatch! %d<>%d" % (len(self.crefs), len(self.ctest))
@@ -86,13 +81,11 @@ class CiderScorer(object):
         '''add an instance (e.g., from another sentence).'''
 
         if type(other) is tuple:
-            ## avoid creating new BleuScorer instances
+            ## avoid creating new CiderScorer instances
             self.cook_append(other[0], other[1])
         else:
-            assert self.compatible(other), "incompatible candidate/references"
             self.ctest.extend(other.ctest)
             self.crefs.extend(other.crefs)
-            self._score = None ## need to recompute
 
         return self
     def compute_doc_freq(self):
