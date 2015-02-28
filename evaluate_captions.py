@@ -29,7 +29,7 @@ __version__ = 1.0
 # Licensed under the Simplified BSD License [see bsd.txt]
 
 from caption_eval.evals import PTBTokenizer, Bleu, Rouge, Meteor, Cider
-from caption_eval.util import pack_coco_annotations, pack_coco_submission
+from caption_eval.utils import pack_coco_annotations, pack_coco_submission
 
 # =================================================
 # specify the path to reference caption file and
