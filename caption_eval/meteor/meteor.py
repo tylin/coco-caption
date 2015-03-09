@@ -33,6 +33,9 @@ class Meteor:
         tmp_images.sort()
         assert(images == tmp_images)
 
+        # per image score
+        score_list = []
+
         eval_line = 'EVAL'
         for i in images:
             assert(len(hypo_for_image[i]) == 1)
@@ -41,7 +44,7 @@ class Meteor:
         score = float(self.meteor_p.stdout.readline().strip())
         self.lock.release()
 
-        return score
+        return score, score_list
 
     def method(self):
         return "METEOR"

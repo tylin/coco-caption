@@ -41,10 +41,10 @@ class Bleu:
 
             bleu_scorer += (hypo[0], ref)
 
-        bleu, bleu_info = bleu_scorer.compute_score(option='shortest')
+        bleu, bleu_list = bleu_scorer.compute_score(option='shortest')
 
         # return (bleu, bleu_info)
-        return bleu
+        return bleu, bleu_list
 
     def method(self):
         return "Bleu"
