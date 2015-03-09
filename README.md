@@ -28,3 +28,10 @@ Evaluation codes for MS COCO caption generation.
 - meteor: Meteor evaluation codes
 - rouge: Rouge evaluation codes
 - cider: CIDEr evaluation codes
+
+## ACKNOWLEDGEMENT ##
+
+0. Bleu: 
+1. Meteor: [Project page](http://www.cs.cmu.edu/~alavie/METEOR/) with related publications. We used the latest version (1.5) of the [Code](https://github.com/mjdenkowski/meteor). Changes have been made to the source code to properly aggreate the statistics for the entire corpus.
+2. Rouge: 
+3. Cider: 
