@@ -32,16 +32,23 @@ class Meteor:
         tmp_images = ref_for_image.keys()
         tmp_images.sort()
         assert(images == tmp_images)
+        scores = []
 
         eval_line = 'EVAL'
+        eval_single = 'SING'
         for i in images:
             assert(len(hypo_for_image[i]) == 1)
-            eval_line += ' ||| {}'.format(self._stat(hypo_for_image[i][0], ref_for_image[i]))
+            stat = self._stat(hypo_for_image[i][0], ref_for_image[i])
+            eval_line += ' ||| {}'.format(stat)
+            sing_line = 'SING ||| {}'.format(stats)
+            self.meteor_p.stdin.write('{}\n'.format(eval_line))
+            scores.append(float(self.meteor_p.stdout.readline().strip()))
+
         self.meteor_p.stdin.write('{}\n'.format(eval_line))
         score = float(self.meteor_p.stdout.readline().strip())
         self.lock.release()
 
-        return score
+        return (score, scores)
 
     def method(self):
         return "METEOR"

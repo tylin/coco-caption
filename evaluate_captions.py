@@ -23,7 +23,7 @@ __version__ = 1.0
 # Microsoft COCO caption evaluation Toolbox.      Version 1.0
 # Data, paper, and tutorials available at:  http://mscoco.org/
 # Code written by:  Xinlei Chen          (CMU)
-#                   Hao Feng             (Univ. of Washington)
+#                   Hao Fang             (Univ. of Washington)
 #                   Tsung-Yi Lin         (Cornell)
 #                   Ramakrishna Vedantam (Virginia Tech)
 # Licensed under the Simplified BSD License [see bsd.txt]
