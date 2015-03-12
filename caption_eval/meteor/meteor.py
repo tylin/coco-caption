@@ -34,6 +34,9 @@ class Meteor:
         assert(images == tmp_images)
         scores = []
 
+        # per image score
+        score_list = []
+
         eval_line = 'EVAL'
         eval_single = 'SING'
         for i in images:
@@ -48,7 +51,11 @@ class Meteor:
         score = float(self.meteor_p.stdout.readline().strip())
         self.lock.release()
 
+<<<<<<< HEAD
         return (score, scores)
+=======
+        return score, score_list
+>>>>>>> 0287bd659f01b1ddb8ee8706b30e70587edee1a4
 
     def method(self):
         return "METEOR"

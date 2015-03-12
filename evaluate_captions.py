@@ -84,10 +84,10 @@ for scorer, method in scorers:
     score = scorer.compute_score(tokenized_hypo_for_image, tokenized_ref_for_image)
     if type(score) == list:
         for s, m in zip(score, method):
-            scores[m] = s
+            scores[m], scores[m+'_per_image'] = s
             print m, s
     else:
-        scores[method] = score
+        scores[method], scores[method+'_per_image'] = score
         print method, score
 
 print scores

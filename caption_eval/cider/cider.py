@@ -48,9 +48,9 @@ class Cider:
 
             cider_scorer += (hypo[0], ref)
 
-        cider = cider_scorer.compute_score()
+        cider, cider_list = cider_scorer.compute_score()
 
-        return cider
+        return cider, cider_list
 
     def method(self):
         return "CIDEr"

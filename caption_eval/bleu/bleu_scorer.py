@@ -194,13 +194,16 @@ class BleuScorer(object):
         return self.compute_score(option, verbose)
         
     def compute_score(self, option=None, verbose=0):
+        n = self.n
+        small = 1e-9
+        tiny = 1e-15 ## so that if guess is 0 still return 0
+        bleu_list = [[]*n]
+
         if self._score is not None:
             return self._score
 
         if option is None:
             option = "average" if len(self.crefs) == 1 else "closest"
-
-        n = self.n
 
         self._testlen = 0
         self._reflen = 0
@@ -221,15 +224,16 @@ class BleuScorer(object):
             for key in ['guess','correct']:
                 for k in xrange(n):
                     totalcomps[key][k] += comps[key][k]
+                    # append per image bleu score
+                    bleu_list[k].append( ( float(comps['guess'][k] + small) \
+                                          /float(comps['correct'][k]) + tiny ) ** (1./(k+1.)) )
             if verbose > 1:
                 print comps, reflen
+
         totalcomps['reflen'] = self._reflen
         totalcomps['testlen'] = self._testlen
         if verbose > 0:
             print totalcomps
-
-        small = 1e-9
-        tiny = 1e-15 ## so that if guess is 0 still return 0
 
         bleus = []
         for nn in range(1,n+1):
@@ -241,17 +245,6 @@ class BleuScorer(object):
             ratio = (self._testlen + tiny) / (self._reflen + small) ## N.B.: avoid zero division
             if ratio < 1: #0 < totalcomps['testlen'] < totalcomps['reflen']:
                 bleus[nn-1] *= math.exp(1-1/ratio)
-        # for k in xrange(n):
-        #     bleu *= float(totalcomps['correct'][k] + tiny ) \
-        #             / (totalcomps['guess'][k] + small)
-        # bleu = bleu ** (1./n)
-        #
-        # ## smoothing: single-sentence effect on the whole doc
-        # ratio = (self._testlen + tiny) / (self._reflen + small) ## N.B.: avoid zero division
-        # if ratio < 1: #0 < totalcomps['testlen'] < totalcomps['reflen']:
-        #     bleu *= math.exp(1-1/ratio)
 
         self._score = bleus
-        # self._score = bleu
-        # self._ratio = ratio
-        return (self._score, totalcomps)
+        return self._score, bleu_list
