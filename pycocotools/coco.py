@@ -1,5 +1,5 @@
 __author__ = 'tylin'
-__version__ = 1.1
+__version__ = '1.0.1'
 # Interface for accessing the Microsoft COCO dataset.
 
 # Microsoft COCO is a large image dataset designed for object detection,
