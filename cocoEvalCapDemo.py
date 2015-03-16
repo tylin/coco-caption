@@ -4,7 +4,7 @@ from pycocotools.coco import COCO
 from pycocoevalcap.eval import COCOEavlCap
 import json
 from json import encoder
-encoder.FLOAT_REPR = lambda o: format(o, '.1f')
+encoder.FLOAT_REPR = lambda o: format(o, '.3f')
 
 dataDir='.'
 dataType='val2014'

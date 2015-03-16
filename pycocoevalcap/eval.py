@@ -53,22 +53,22 @@ class COCOEavlCap:
                 for sc, scs, m in zip(score, scores, method):
                     self.setEval(sc, m)
                     self.setImgToEvalImgs(scs, imgIds, m)
-                    print "%s: %0.1f"%(m, sc*100.0)
+                    print "%s: %0.3f"%(m, sc)
             else:
                 self.setEval(score, method)
                 self.setImgToEvalImgs(scores, imgIds, method)
-                print "%s: %0.1f"%(method, score*100.0)
+                print "%s: %0.3f"%(method, score)
         self.setEvalImgs()
 
     def setEval(self, score, method):
-        self.eval[method] = score *100.0
+        self.eval[method] = score
 
     def setImgToEvalImgs(self, scores, imgIds, method):
         for imgId, score in zip(imgIds, scores):
             if not imgId in self.imgToEval:
                 self.imgToEval[imgId] = {}
                 self.imgToEval[imgId]["image_id"] = imgId
-            self.imgToEval[imgId][method] = score *100.0
+            self.imgToEval[imgId][method] = score
 
     def setEvalImgs(self):
         self.evalImgs = [eval for imgId, eval in self.imgToEval.items()]
