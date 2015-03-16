@@ -225,8 +225,8 @@ class BleuScorer(object):
                 for k in xrange(n):
                     totalcomps[key][k] += comps[key][k]
                     # append per image bleu score
-                    bleu_list[k].append( ( float(comps['correct'][k]) + tiny) \
-                                          /(float(comps['guess'][k]) + small ) ** (1./(k+1.)) )
+                    bleu_list[k].append( ( ( float(comps['correct'][k]) + tiny) \
+                                           /(float(comps['guess'][k]) + small ) ) ** (1./(k+1.)) )
             if verbose > 1:
                 print comps, reflen
 

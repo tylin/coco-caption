@@ -15,8 +15,8 @@ class COCOEavlCap:
         self.params = {'image_id': coco.getImgIds()}
 
     def evaluate(self):
-        # imgIds = self.params['image_id']
-        imgIds = self.coco.getImgIds()
+        imgIds = self.params['image_id']
+        # imgIds = self.coco.getImgIds()
         gts = {}
         res = {}
         for imgId in imgIds:
@@ -36,10 +36,10 @@ class COCOEavlCap:
         # =================================================
         print 'setting up scorers...'
         scorers = [
-            (Bleu(4), ["B1", "B2", "B3", "B4"]),
-            (Meteor(),"METEOR"),
+            (Bleu(4), ["Bleu_1", "Bleu_2", "Bleu_3", "Bleu_4"]),
+            (Meteor(),"METEOR_L"),
             (Rouge(), "ROUGE"),
-            (Cider(), "CIDER")
+            (Cider(), "CIDEr")
         ]
 
         # =================================================
