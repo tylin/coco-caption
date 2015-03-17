@@ -3,6 +3,7 @@
 
 # In[1]:
 
+get_ipython().magic(u'matplotlib inline')
 from pycocotools.coco import COCO
 from pycocoevalcap.eval import COCOEavlCap
 import matplotlib.pyplot as plt
@@ -28,15 +29,14 @@ subtypes=['results', 'evalImgs', 'eval']
 
 # In[3]:
 
-# instantiate coco object and cocoRes object
+# create coco object and cocoRes object
 coco = COCO(annFile)
 cocoRes = coco.loadRes(resFile)
 
 
 # In[4]:
 
-# instantiate cocoEval object by taking coco and cocoRes
-
+# create cocoEval object by taking coco and cocoRes
 cocoEval = COCOEavlCap(coco, cocoRes)
 
 # evaluate on a subset of images by setting
