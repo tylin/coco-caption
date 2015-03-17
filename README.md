@@ -17,10 +17,10 @@ Evaluation codes for MS COCO caption generation.
 
 ./results
 - captions_val2014_fakecap_results.json (example fake results for running demo)
-- More detials can be found under evaluate->format tab on [COCO dataset](http://mscoco.org/dataset)
+- More details can be found under evaluate->format tab on [COCO dataset](http://mscoco.org/dataset)
 
 ./pycocoevalcap: The folder where all evaluation codes are stored.
-- evals.py: includes COCOEavlCap class that includes multiple scores.
+- evals.py: The file includes COCOEavlCap class that can be used to evaluate results on COCO.
 - tokenizer: PTBTokenizer
 - bleu: Bleu evalutation codes
 - meteor: Meteor evaluation codes
