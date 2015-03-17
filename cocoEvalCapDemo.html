@@ -1724,7 +1724,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="c"># instantiate coco object and cocoRes object</span>
+<div class="highlight"><pre><span class="c"># create coco object and cocoRes object</span>
 <span class="n">coco</span> <span class="o">=</span> <span class="n">COCO</span><span class="p">(</span><span class="n">annFile</span><span class="p">)</span>
 <span class="n">cocoRes</span> <span class="o">=</span> <span class="n">coco</span><span class="o">.</span><span class="n">loadRes</span><span class="p">(</span><span class="n">resFile</span><span class="p">)</span>
 </pre></div>
@@ -1762,8 +1762,7 @@ index created!
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="c"># instantiate cocoEval object by taking coco and cocoRes</span>
-
+<div class="highlight"><pre><span class="c"># create cocoEval object by taking coco and cocoRes</span>
 <span class="n">cocoEval</span> <span class="o">=</span> <span class="n">COCOEavlCap</span><span class="p">(</span><span class="n">coco</span><span class="p">,</span> <span class="n">cocoRes</span><span class="p">)</span>
 
 <span class="c"># evaluate on a subset of images by setting</span>
