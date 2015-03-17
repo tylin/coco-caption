@@ -9,29 +9,27 @@ Evaluation codes for MS COCO caption generation.
 
 ## FILES ##
 ./
-- evaluate_caption.py: demo script
+- cocoEvalCapDemo.py (demo script)
 
-./data
-- captions_val2014.json
-		The caption annotations of COCO2014 validation set.
-		It can be downloaded from http://mscoco.org/download
-- captions_val2014_submission.json:
-        The generated captions for evaluation.
-        The format is:
-		[{"image_id": int, "caption": str}]
+./annotation
+- captions_val2014.json (COCO 2014 caption validation set)
+- More detials can be found under download tab on [link](http://mscoco.org/dataset)
 
-./caption_eval: This is a folder where all evaluation codes are stored.
-- evals.py: includes Python classes of different methods.
-- utils.py: utility functions for parsing data.
+./results
+- captions_val2014_fakecap_results.json (example fake results for running demo)
+- More detials can be found under evaluate->format tab on [link](http://mscoco.org/dataset)
+
+./pycocoevalcap: The folder where all evaluation codes are stored.
+- evals.py: includes COCOEavlCap class that includes multiple scores.
 - tokenizer: PTBTokenizer
 - bleu: Bleu evalutation codes
 - meteor: Meteor evaluation codes
-- rouge: Rouge evaluation codes
+- rouge: Rouge-L evaluation codes
 - cider: CIDEr evaluation codes
 
-## ACKNOWLEDGEMENT ##
+## Reference ##
 
-0. Bleu: 
+0. BLEU: BLEU: a Method for Automatic Evaluation of Machine Translation, [pdf](http://delivery.acm.org/10.1145/1080000/1073135/p311-papineni.pdf?ip=72.229.132.206&id=1073135&acc=OPEN&key=4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E6D218144511F3437&CFID=644819513&CFTOKEN=71377947&__acm__=1426607117_16e4342fbc20d41c064c8fb685cffe60)
 1. Meteor: [Project page](http://www.cs.cmu.edu/~alavie/METEOR/) with related publications. We used the latest version (1.5) of the [Code](https://github.com/mjdenkowski/meteor). Changes have been made to the source code to properly aggreate the statistics for the entire corpus.
-2. Rouge: 
-3. Cider: 
+2. Rouge-L: ROUGE: A Package for Automatic Evaluation of Summaries [pdf](http://anthology.aclweb.org/W/W04/W04-1013.pdf)
+3. CIDEr: CIDEr: Consensus-based Image Description Evaluation [pdf](http://arxiv.org/pdf/1411.5726.pdf)

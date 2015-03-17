@@ -3,7 +3,6 @@
 
 # In[1]:
 
-get_ipython().magic(u'matplotlib inline')
 from pycocotools.coco import COCO
 from pycocoevalcap.eval import COCOEavlCap
 import matplotlib.pyplot as plt
