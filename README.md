@@ -35,8 +35,8 @@ Evaluation codes for MS COCO caption generation.
 - CIDEr: [CIDEr: Consensus-based Image Description Evaluation] (http://arxiv.org/pdf/1411.5726.pdf)
 
 ## Acknowledgement ##
-- Hao Feng (University of Washington)
 - Xinlei Chen (CMU)
+- Hao Feng (University of Washington)
 - Tsung-Yi Lin (Cornell)
 - Ramakrishna Vedantam (Virgina Tech)
 
