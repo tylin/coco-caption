@@ -7,7 +7,7 @@
 # Usage :
 #
 # Creation Date : 06-01-2015
-# Last Modified : Tue Jan  6 22:34:41 2015
+# Last Modified : Thu 19 Mar 2015 08:59:32 AM PDT
 # Author : Hao Fang
 
 from bleu_scorer import BleuScorer
@@ -39,6 +39,8 @@ class Bleu:
             bleu_scorer += (hypo[0], ref)
 
         score, scores = bleu_scorer.compute_score(option='shortest')
+        #score, scores = bleu_scorer.compute_score(option='closest')
+        #score, scores = bleu_scorer.compute_score(option='average')
 
         # return (bleu, bleu_info)
         return score, scores

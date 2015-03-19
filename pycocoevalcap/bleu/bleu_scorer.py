@@ -7,7 +7,9 @@
 # reserved. Do not redistribute without permission from the
 # author. Not for commercial use.
 
-# Modified by: Hao Fang <hfang@uw.edu>
+# Modified by: 
+# Hao Fang <hfang@uw.edu>
+# Tsung-Yi Lin <tl483@cornell.edu>
 
 '''Provides:
 cook_refs(refs, n=4): Transform a list of reference sentences as strings into a form usable by cook_test().
@@ -245,6 +247,9 @@ class BleuScorer(object):
             ratio = (self._testlen + tiny) / (self._reflen + small) ## N.B.: avoid zero division
             if ratio < 1: #0 < totalcomps['testlen'] < totalcomps['reflen']:
                 bleus[nn-1] *= math.exp(1-1/ratio)
+
+        if verbose > 0:
+            print self._testlen, self._reflen, ratio
 
         self._score = bleus
         return self._score, bleu_list
