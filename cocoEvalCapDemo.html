@@ -1683,7 +1683,7 @@ div#notebook {
     <div class="input_area">
 <div class="highlight"><pre><span class="o">%</span><span class="k">matplotlib</span> <span class="n">inline</span>
 <span class="kn">from</span> <span class="nn">pycocotools.coco</span> <span class="kn">import</span> <span class="n">COCO</span>
-<span class="kn">from</span> <span class="nn">pycocoevalcap.eval</span> <span class="kn">import</span> <span class="n">COCOEavlCap</span>
+<span class="kn">from</span> <span class="nn">pycocoevalcap.eval</span> <span class="kn">import</span> <span class="n">COCOEvalCap</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">skimage.io</span> <span class="kn">as</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">pylab</span>
@@ -1741,11 +1741,11 @@ div#notebook {
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 loading annotations into memory...
-0:00:01.102208
+0:00:01.182312
 creating index...
 index created!
 Loading and preparing results...     
-DONE (t=0.05s)
+DONE (t=0.06s)
 creating index...
 index created!
 
@@ -1763,14 +1763,14 @@ index created!
 <div class="inner_cell">
     <div class="input_area">
 <div class="highlight"><pre><span class="c"># create cocoEval object by taking coco and cocoRes</span>
-<span class="n">cocoEval</span> <span class="o">=</span> <span class="n">COCOEavlCap</span><span class="p">(</span><span class="n">coco</span><span class="p">,</span> <span class="n">cocoRes</span><span class="p">)</span>
+<span class="n">cocoEval</span> <span class="o">=</span> <span class="n">COCOEvalCap</span><span class="p">(</span><span class="n">coco</span><span class="p">,</span> <span class="n">cocoRes</span><span class="p">)</span>
 
 <span class="c"># evaluate on a subset of images by setting</span>
 <span class="c"># cocoEval.params[&#39;image_id&#39;] = cocoRes.getImgIds()</span>
 <span class="c"># please remove this line when evaluating the full validation set</span>
 <span class="n">cocoEval</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;image_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cocoRes</span><span class="o">.</span><span class="n">getImgIds</span><span class="p">()</span>
 
-<span class="c"># evalute results</span>
+<span class="c"># evaluate results</span>
 <span class="n">cocoEval</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
 </pre></div>
 

@@ -3,9 +3,9 @@
 
 # In[1]:
 
-# get_ipython().magic(u'matplotlib inline')
+get_ipython().magic(u'matplotlib inline')
 from pycocotools.coco import COCO
-from pycocoevalcap.eval import COCOEavlCap
+from pycocoevalcap.eval import COCOEvalCap
 import matplotlib.pyplot as plt
 import skimage.io as io
 import pylab
@@ -37,14 +37,14 @@ cocoRes = coco.loadRes(resFile)
 # In[4]:
 
 # create cocoEval object by taking coco and cocoRes
-cocoEval = COCOEavlCap(coco, cocoRes)
+cocoEval = COCOEvalCap(coco, cocoRes)
 
 # evaluate on a subset of images by setting
 # cocoEval.params['image_id'] = cocoRes.getImgIds()
 # please remove this line when evaluating the full validation set
 cocoEval.params['image_id'] = cocoRes.getImgIds()
 
-# evalute results
+# evaluate results
 cocoEval.evaluate()
 
 
