@@ -5,7 +5,7 @@
 # Description : Do the PTB Tokenization and remove punctuations.
 #
 # Creation Date : 29-12-2014
-# Last Modified : Thu Mar 19 09:40:57 2015
+# Last Modified : Thu Mar 19 09:53:35 2015
 # Authors : Hao Fang <hfang@uw.edu> and Tsung-Yi Lin <tl483@cornell.edu>
 
 import os
@@ -14,9 +14,10 @@ import subprocess
 import tempfile
 import itertools
 
+# path to the stanford corenlp jar
 STANFORD_CORENLP_3_4_1_JAR = 'stanford-corenlp-3.4.1.jar'
-#print STANFORD_CORENLP_3_4_1_JAR
 
+# punctuations to be removed from the sentences
 PUNCTUATIONS = ["''", "'", "``", "`", "-LRB-", "-RRB-", "-LCB-", "-RCB-", \
         ".", "?", "!", ",", ":", "-", "--", "...", ";"] 
 

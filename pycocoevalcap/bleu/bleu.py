@@ -5,7 +5,7 @@
 # Description : Wrapper for BLEU scorer.
 #
 # Creation Date : 06-01-2015
-# Last Modified : Thu Mar 19 09:40:45 2015
+# Last Modified : Thu Mar 19 09:54:00 2015
 # Authors : Hao Fang <hfang@uw.edu> and Tsung-Yi Lin <tl483@cornell.edu>
 
 from bleu_scorer import BleuScorer
@@ -32,7 +32,7 @@ class Bleu:
             assert(type(hypo) is list)
             assert(len(hypo) == 1)
             assert(type(ref) is list)
-            assert(len(ref) > 0)
+            assert(len(ref) > 1)
 
             bleu_scorer += (hypo[0], ref)
 
