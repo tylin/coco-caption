@@ -2,13 +2,11 @@
 # 
 # File Name : bleu.py
 #
-# Description :
-#
-# Usage :
+# Description : Wrapper for BLEU scorer.
 #
 # Creation Date : 06-01-2015
-# Last Modified : Tue Jan  6 22:34:41 2015
-# Author : Hao Fang
+# Last Modified : Thu Mar 19 09:39:21 2015
+# Authors : Hao Fang <hfang@uw.edu> and Tsung-Yi Lin <tl483@cornell.edu>
 
 from bleu_scorer import BleuScorer
 
