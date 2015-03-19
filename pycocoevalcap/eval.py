@@ -5,7 +5,7 @@ from meteor.meteor import Meteor
 from rouge.rouge import Rouge
 from cider.cider import Cider
 
-class COCOEavlCap:
+class COCOEvalCap:
     def __init__(self, coco, cocoRes):
         self.evalImgs = []
         self.eval = {}

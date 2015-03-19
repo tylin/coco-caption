@@ -5,7 +5,7 @@
 # Description : Do the PTB Tokenization and remove punctuations.
 #
 # Creation Date : 29-12-2014
-# Last Modified : Thu Mar 19 09:39:46 2015
+# Last Modified : Thu Mar 19 09:40:57 2015
 # Authors : Hao Fang <hfang@uw.edu> and Tsung-Yi Lin <tl483@cornell.edu>
 
 import os

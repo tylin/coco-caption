@@ -5,7 +5,7 @@
 # Description : Wrapper for BLEU scorer.
 #
 # Creation Date : 06-01-2015
-# Last Modified : Thu Mar 19 09:39:21 2015
+# Last Modified : Thu Mar 19 09:40:45 2015
 # Authors : Hao Fang <hfang@uw.edu> and Tsung-Yi Lin <tl483@cornell.edu>
 
 from bleu_scorer import BleuScorer
@@ -37,6 +37,8 @@ class Bleu:
             bleu_scorer += (hypo[0], ref)
 
         score, scores = bleu_scorer.compute_score(option='shortest')
+        #score, scores = bleu_scorer.compute_score(option='closest')
+        #score, scores = bleu_scorer.compute_score(option='average')
 
         # return (bleu, bleu_info)
         return score, scores
