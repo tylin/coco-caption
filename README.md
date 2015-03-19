@@ -36,7 +36,7 @@ Evaluation codes for MS COCO caption generation.
 
 ## Acknowledgement ##
 - Xinlei Chen (CMU)
-- Hao Feng (University of Washington)
+- Hao Fang (University of Washington)
 - Tsung-Yi Lin (Cornell)
 - Ramakrishna Vedantam (Virgina Tech)
 
