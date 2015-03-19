@@ -35,7 +35,7 @@ Evaluation codes for MS COCO caption generation.
 - Rouge-L: [ROUGE: A Package for Automatic Evaluation of Summaries](http://anthology.aclweb.org/W/W04/W04-1013.pdf)
 - CIDEr: [CIDEr: Consensus-based Image Description Evaluation] (http://arxiv.org/pdf/1411.5726.pdf)
 
-## Acknowledgement ##
+## Developers ##
 - Xinlei Chen (CMU)
 - Hao Fang (University of Washington)
 - Tsung-Yi Lin (Cornell)
