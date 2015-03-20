@@ -226,9 +226,18 @@ class BleuScorer(object):
             for key in ['guess','correct']:
                 for k in xrange(n):
                     totalcomps[key][k] += comps[key][k]
-                    # append per image bleu score
-                    bleu_list[k].append( ( ( float(comps['correct'][k]) + tiny) \
-                                           /(float(comps['guess'][k]) + small ) ) ** (1./(k+1.)) )
+
+            # append per image bleu score
+            bleu = 1.
+            for k in xrange(n):
+                bleu *= (float(comps['correct'][k]) + tiny) \
+                        /(float(comps['guess'][k]) + small) 
+                bleu_list[k].append(bleu ** (1./(k+1)))
+            ratio = (testlen + tiny) / (reflen / small) ## N.B.: avoid zero division
+            if ratio < 1:
+                for k in xrange(n):
+                    bleu_list[k][-1] *= math.exp(1 - 1/ratio)
+
             if verbose > 1:
                 print comps, reflen
 
@@ -236,20 +245,18 @@ class BleuScorer(object):
         totalcomps['testlen'] = self._testlen
         if verbose > 0:
             print totalcomps
+            print self._testlen, self._reflen, ratio
 
         bleus = []
-        for nn in range(1,n+1):
-            bleu = 1.
-            for k in xrange(nn):
-                bleu *= float(totalcomps['correct'][k] + tiny ) \
-                        / (totalcomps['guess'][k] + small)
-            bleus.append(bleu ** (1./nn))
-            ratio = (self._testlen + tiny) / (self._reflen + small) ## N.B.: avoid zero division
-            if ratio < 1: #0 < totalcomps['testlen'] < totalcomps['reflen']:
-                bleus[nn-1] *= math.exp(1-1/ratio)
-
-        if verbose > 0:
-            print self._testlen, self._reflen, ratio
+        bleu = 1.
+        for k in xrange(n):
+            bleu *= float(totalcomps['correct'][k] + tiny) \
+                    / (totalcomps['guess'][k] + small)
+            bleus.append(bleu ** (1./(k+1)))
+        ratio = (self._testlen + tiny) / (self._reflen + small) ## N.B.: avoid zero division
+        if ratio < 1:
+            for k in xrange(n):
+                bleus[k] *= math.exp(1 - 1/ratio)
 
         self._score = bleus
         return self._score, bleu_list
