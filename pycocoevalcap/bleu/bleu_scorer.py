@@ -233,7 +233,7 @@ class BleuScorer(object):
                 bleu *= (float(comps['correct'][k]) + tiny) \
                         /(float(comps['guess'][k]) + small) 
                 bleu_list[k].append(bleu ** (1./(k+1)))
-            ratio = (testlen + tiny) / (reflen / small) ## N.B.: avoid zero division
+            ratio = (testlen + tiny) / (reflen + small) ## N.B.: avoid zero division
             if ratio < 1:
                 for k in xrange(n):
                     bleu_list[k][-1] *= math.exp(1 - 1/ratio)
@@ -243,9 +243,6 @@ class BleuScorer(object):
 
         totalcomps['reflen'] = self._reflen
         totalcomps['testlen'] = self._testlen
-        if verbose > 0:
-            print totalcomps
-            print self._testlen, self._reflen, ratio
 
         bleus = []
         bleu = 1.
@@ -257,6 +254,10 @@ class BleuScorer(object):
         if ratio < 1:
             for k in xrange(n):
                 bleus[k] *= math.exp(1 - 1/ratio)
+
+        if verbose > 0:
+            print totalcomps
+            print "ratio:", ratio
 
         self._score = bleus
         return self._score, bleu_list
