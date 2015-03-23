@@ -166,6 +166,8 @@ class CiderScorer(object):
             score_avg = np.mean(score)
             # divide by number of references
             score_avg /= len(refs)
+            # multiply score by 10
+            score_avg *= 10.0
             # append score of an image to the score list
             scores.append(score_avg)
         return scores
