@@ -146,7 +146,10 @@ class CiderScorer(object):
                 for (ngram,count) in vec_hyp[n].iteritems():
                     # vrama91 : added clipping
                     val[n] += min(vec_hyp[n][ngram],vec_ref[n][ngram]) * vec_ref[n][ngram]
-                val[n] /= (norm_hyp[n]*norm_ref[n])
+                if norm_hyp[n]*norm_ref[n] == 0:
+                    val[n] = 0
+                else:
+                    val[n] /= (norm_hyp[n]*norm_ref[n])
                 # vrama91: added a length based gaussian penalty
                 val[n] *= np.e**(-(delta**2)/(2*self.sigma**2))
             return val
