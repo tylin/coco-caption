@@ -5,6 +5,7 @@
 import copy
 from collections import defaultdict
 import numpy as np
+import pdb
 
 def precook(s, n=4, out=False):
     """
@@ -122,7 +123,7 @@ class CiderScorer(object):
                 vec[n][ngram] = float(term_freq)*(self.ref_len - df)
                 # compute norm for the vector.  the norm will be used for computing similarity
                 norm[n] += pow(vec[n][ngram], 2)
-                if (n==1):
+                if n == 1:
                     length += term_freq
             norm = [np.sqrt(n) for n in norm]
             return vec, norm, length
@@ -145,14 +146,14 @@ class CiderScorer(object):
                 # ngram
                 for (ngram,count) in vec_hyp[n].iteritems():
                     # vrama91 : added clipping
-                    val[n] += min(vec_hyp[n][ngram],vec_ref[n][ngram]) * vec_ref[n][ngram]
-                if norm_hyp[n]*norm_ref[n] == 0:
-                    val[n] = 0
-                else:
-                    val[n] /= (norm_hyp[n]*norm_ref[n])
+                    val[n] += min(vec_hyp[n][ngram], vec_ref[n][ngram]) * vec_ref[n][ngram]
+
+                val[n] /= (norm_hyp[n]*norm_ref[n])
+
                 # vrama91: added a length based gaussian penalty
                 val[n] *= np.e**(-(delta**2)/(2*self.sigma**2))
             return val
+
         # compute log reference length
         self.ref_len = np.log(float(len(self.crefs)))
 
@@ -179,8 +180,8 @@ class CiderScorer(object):
         # compute idf
         self.compute_doc_freq()
         # assert to check document frequency
-        assert(len(self.ctest)>=max(self.document_frequency.values()))
+        assert(len(self.ctest) >= max(self.document_frequency.values()))
         # compute cider score
         score = self.compute_cider()
-
+        # debug
         return np.mean(np.array(score)), np.array(score)
