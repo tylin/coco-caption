@@ -150,7 +150,7 @@ class CiderScorer(object):
                     # vrama91 : added clipping
                     val[n] += min(vec_hyp[n][ngram], vec_ref[n][ngram]) * vec_ref[n][ngram]
 
-                if norm_hyp[n] != 0:
+                if (norm_hyp[n] != 0) and (norm_ref[n] != 0):
                     val[n] /= (norm_hyp[n]*norm_ref[n])
 
                 assert(not math.isnan(val[n]))
