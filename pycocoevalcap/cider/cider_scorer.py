@@ -6,6 +6,7 @@ import copy
 from collections import defaultdict
 import numpy as np
 import pdb
+import math
 
 def precook(s, n=4, out=False):
     """
@@ -104,13 +105,13 @@ class CiderScorer(object):
 
     def compute_cider(self):
         def counts2vec(cnts):
-            '''
+            """
             Function maps counts of ngram to vector of tfidf weights.
             The function returns vec, an array of dictionary that store mapping of n-gram and tf-idf weights.
             The n-th entry of array denotes length of n-grams.
             :param cnts:
             :return: vec (array of dict), norm (array of float), length (int)
-            '''
+            """
             vec = [defaultdict(float) for _ in range(self.n)]
             length = 0
             norm = [0.0 for _ in range(self.n)]
@@ -123,6 +124,7 @@ class CiderScorer(object):
                 vec[n][ngram] = float(term_freq)*(self.ref_len - df)
                 # compute norm for the vector.  the norm will be used for computing similarity
                 norm[n] += pow(vec[n][ngram], 2)
+
                 if n == 1:
                     length += term_freq
             norm = [np.sqrt(n) for n in norm]
@@ -148,8 +150,10 @@ class CiderScorer(object):
                     # vrama91 : added clipping
                     val[n] += min(vec_hyp[n][ngram], vec_ref[n][ngram]) * vec_ref[n][ngram]
 
-                val[n] /= (norm_hyp[n]*norm_ref[n])
+                if norm_hyp[n] != 0:
+                    val[n] /= (norm_hyp[n]*norm_ref[n])
 
+                assert(not math.isnan(val[n]))
                 # vrama91: added a length based gaussian penalty
                 val[n] *= np.e**(-(delta**2)/(2*self.sigma**2))
             return val
@@ -184,4 +188,5 @@ class CiderScorer(object):
         # compute cider score
         score = self.compute_cider()
         # debug
+        # print score
         return np.mean(np.array(score)), np.array(score)
