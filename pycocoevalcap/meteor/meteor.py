@@ -66,11 +66,15 @@ class Meteor:
         # EVAL ||| stats 
         self.meteor_p.stdin.write('{}\n'.format(eval_line))
         score = float(self.meteor_p.stdout.readline().strip())
+        # bug fix: there are two values returned by the jar file, one average, and one all, so do it twice
+        # thanks for Andrej for pointing this out
+        score = float(self.meteor_p.stdout.readline().strip())
         self.lock.release()
         return score
  
     def __exit__(self):
         self.lock.acquire()
         self.meteor_p.stdin.close()
+        self.meteor_p.kill()
         self.meteor_p.wait()
         self.lock.release()
