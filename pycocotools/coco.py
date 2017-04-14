@@ -272,7 +272,10 @@ class COCO:
 
         print 'Loading and preparing results...     '
         time_t = datetime.datetime.utcnow()
-        anns    = json.load(open(resFile))
+        if type(resFile) == str:
+            anns = json.load(open(resFile))
+        else:
+            anns = resFile
         assert type(anns) == list, 'results in not an array of objects'
         annsImgIds = [ann['image_id'] for ann in anns]
         assert set(annsImgIds) == (set(annsImgIds) & set(self.getImgIds())), \
