@@ -1,3 +1,11 @@
+## Work in progress
+This repository is supposed to provide Python 3 support for the caption evaluation metrics used for the MS COCO dataset.
+
+The code is derived from the original repository that supports Python 2.7: https://github.com/tylin/coco-caption  
+The goal of this implementation is to be compatible with the COCO API that works under Python 3: https://github.com/cocodataset/cocoapi
+
+**Python 3 support is not yet implemented!** This message will be updated once it is fully functional.
+
 Microsoft COCO Caption Evaluation
 ===================
 
