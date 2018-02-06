@@ -1,33 +1,21 @@
-## Work in progress
-This repository is supposed to provide Python 3 support for the caption evaluation metrics used for the MS COCO dataset.
-
-The code is derived from the original repository that supports Python 2.7: https://github.com/tylin/coco-caption  
-The goal of this implementation is to be compatible with the COCO API that works under Python 3: https://github.com/cocodataset/cocoapi
-
-**Python 3 support is not yet implemented!** This message will be updated once it is fully functional.
-
 Microsoft COCO Caption Evaluation
 ===================
 
 Evaluation codes for MS COCO caption generation.
 
+## Description ##
+This repository provides Python 3 support for the caption evaluation metrics used for the MS COCO dataset.
+
+The code is derived from the original repository that supports Python 2.7: https://github.com/tylin/coco-caption.  
+Caption evaluation depends on the COCO API that natively supports Python 3 (see Requirements).
+
 ## Requirements ##
-- java 1.8.0
-- python 2.7
+- Java 1.8.0
+- Python 3 (tested on Python 3.6)
+- pycocotools (COCO Python API): https://github.com/cocodataset/cocoapi
 
 ## Files ##
 ./
-- cocoEvalCapDemo.py (demo script)
-
-./annotation
-- captions_val2014.json (MS COCO 2014 caption validation set)
-- Visit MS COCO [download](http://mscoco.org/dataset/#download) page for more details.
-
-./results
-- captions_val2014_fakecap_results.json (an example of fake results for running demo)
-- Visit MS COCO [format](http://mscoco.org/dataset/#format) page for more details.
-
-./pycocoevalcap: The folder where all evaluation codes are stored.
 - evals.py: The file includes COCOEavlCap class that can be used to evaluate results on COCO.
 - tokenizer: Python wrapper of Stanford CoreNLP PTBTokenizer
 - bleu: Bleu evalutation codes
