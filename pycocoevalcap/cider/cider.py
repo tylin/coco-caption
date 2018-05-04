@@ -7,7 +7,7 @@
 #
 # Authors: Ramakrishna Vedantam <vrama91@vt.edu> and Tsung-Yi Lin <tl483@cornell.edu>
 
-from cider_scorer import CiderScorer
+from pycocoevalcap.cider.cider_scorer import CiderScorer
 import pdb
 
 class Cider:

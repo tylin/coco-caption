@@ -10,6 +10,7 @@
 import numpy as np
 import pdb
 
+
 def my_lcs(string, sub):
     """
     Calculates longest common subsequence for a pair of tokenized strings
@@ -32,6 +33,7 @@ def my_lcs(string, sub):
                 lengths[i][j] = max(lengths[i-1][j] , lengths[i][j-1])
 
     return lengths[len(string)][len(sub)]
+
 
 class Rouge():
     '''
