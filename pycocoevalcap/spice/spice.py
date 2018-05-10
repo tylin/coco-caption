@@ -65,11 +65,11 @@ class Spice:
             os.makedirs(cache_dir)
         spice_cmd = ['java', '-jar', '-Xmx8G', SPICE_JAR, in_file.name,
                      '-out', out_file.name,
-                     '-threads', 8,
+                     '-threads', '8',
                      '-subset',
                      '-silent']
 
-        subprocess.check_call(spice_cmd, cwd=os.path.dirname(os.path.abspath(__file__)))
+        subprocess.run(spice_cmd, check=True, cwd=os.path.dirname(os.path.abspath(__file__)))
 
         # Read and process results
         with open(out_file.name) as data_file:    
