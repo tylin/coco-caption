@@ -1,18 +1,21 @@
 __author__ = 'tylin'
-from pycocoevalcap.tokenizer.ptbtokenizer import PTBTokenizer
-from pycocoevalcap.bleu.bleu import Bleu
-from pycocoevalcap.meteor.meteor import Meteor
-from pycocoevalcap.rouge.rouge import Rouge
-from pycocoevalcap.cider.cider import Cider
+from .tokenizer.ptbtokenizer import PTBTokenizer
+from .bleu.bleu import Bleu
+from .meteor.meteor import Meteor
+from .rouge.rouge import Rouge
+from .cider.cider import Cider
+from .spice.spice import Spice
+
 
 class COCOEvalCap:
-    def __init__(self, coco, cocoRes):
+    def __init__(self, coco, coco_res, df):
         self.evalImgs = []
         self.eval = {}
         self.imgToEval = {}
         self.coco = coco
-        self.cocoRes = cocoRes
+        self.coco_res = coco_res
         self.params = {'image_id': coco.getImgIds()}
+        self.df = df
 
     def evaluate(self):
         imgIds = self.params['image_id']
@@ -21,7 +24,7 @@ class COCOEvalCap:
         res = {}
         for imgId in imgIds:
             gts[imgId] = self.coco.imgToAnns[imgId]
-            res[imgId] = self.cocoRes.imgToAnns[imgId]
+            res[imgId] = self.coco_res.imgToAnns[imgId]
 
         # =================================================
         # Set up scorers
@@ -39,7 +42,8 @@ class COCOEvalCap:
             (Bleu(4), ["Bleu_1", "Bleu_2", "Bleu_3", "Bleu_4"]),
             (Meteor(), "METEOR"),
             (Rouge(), "ROUGE_L"),
-            (Cider(), "CIDEr")
+            (Cider(df=self.df), "CIDEr"),
+            (Spice(), "SPICE")
         ]
 
         # =================================================
@@ -47,29 +51,29 @@ class COCOEvalCap:
         # =================================================
         for scorer, method in scorers:
             print('computing %s score...' % (scorer.method()))
-            if method == "METEOR":
+            if method != "SPICE":
                 continue
             score, scores = scorer.compute_score(gts, res)
             if type(method) == list:
                 for sc, scs, m in zip(score, scores, method):
-                    self.set_eval(sc, m)
-                    self.set_img_to_eval_imgs(scs, gts.keys(), m)
+                    self.setEval(sc, m)
+                    self.setImgToEvalImgs(scs, gts.keys(), m)
                     print("%s: %0.3f" % (m, sc))
             else:
-                self.set_eval(score, method)
-                self.set_img_to_eval_imgs(scores, gts.keys(), method)
+                self.setEval(score, method)
+                self.setImgToEvalImgs(scores, gts.keys(), method)
                 print("%s: %0.3f" % (method, score))
-        self.set_eval_imgs()
+        self.setEvalImgs()
 
-    def set_eval(self, score, method):
+    def setEval(self, score, method):
         self.eval[method] = score
 
-    def set_img_to_eval_imgs(self, scores, imgIds, method):
+    def setImgToEvalImgs(self, scores, imgIds, method):
         for imgId, score in zip(imgIds, scores):
             if not imgId in self.imgToEval:
                 self.imgToEval[imgId] = {}
                 self.imgToEval[imgId]["image_id"] = imgId
             self.imgToEval[imgId][method] = score
 
-    def set_eval_imgs(self):
+    def setEvalImgs(self):
         self.evalImgs = [eval for imgId, eval in self.imgToEval.items()]

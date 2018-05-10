@@ -29,7 +29,7 @@ __version__ = '1.0.1'
 #  loadImgs   - Load imgs with the specified ids.
 #  segToMask  - Convert polygon segmentation to binary mask.
 #  showAnns   - Display the specified annotations.
-#  loadRes    - Load result file and create result api object.
+#  load_res    - Load result file and create result api object.
 # Throughout the API "ann"=annotation, "cat"=category, and "img"=image.
 # Help on each functions can be accessed by: "help COCO>function".
 
@@ -51,6 +51,7 @@ from matplotlib.patches import Polygon
 import numpy as np
 from skimage.draw import polygon
 import copy
+
 
 class COCO:
     def __init__(self, annotation_file=None):
@@ -74,6 +75,7 @@ class COCO:
             print(datetime.datetime.utcnow() - time_t)
             self.dataset = dataset
             self.createIndex()
+
 
     def createIndex(self):
         # create index
