@@ -15,7 +15,7 @@ class Cider:
     """
     Main Class to compute the CIDEr metric
     """
-    def __init__(self, df, test=None, refs=None, n=4, sigma=6.0):
+    def __init__(self, df='corpus', test=None, refs=None, n=4, sigma=6.0):
         # set cider to sum over 1 to 4-grams
         self._n = n
         # set the standard deviation parameter for gaussian penalty

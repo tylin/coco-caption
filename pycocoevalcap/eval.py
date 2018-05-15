@@ -8,7 +8,7 @@ from .spice.spice import Spice
 
 
 class COCOEvalCap:
-    def __init__(self, coco, coco_res, df):
+    def __init__(self, coco, coco_res, df='corpus'):
         self.evalImgs = []
         self.eval = {}
         self.imgToEval = {}
@@ -43,7 +43,7 @@ class COCOEvalCap:
             (Meteor(), "METEOR"),
             (Rouge(), "ROUGE_L"),
             (Cider(df=self.df), "CIDEr"),
-            (Spice(), "SPICE")
+            #(Spice(), "SPICE")
         ]
 
         # =================================================
