@@ -15,19 +15,22 @@ METEOR_JAR = 'meteor-1.5.jar'
 class Meteor:
 
     def __init__(self):
+        self.env = os.environ
+        self.env['LC_ALL'] = 'en_US.UTF_8'
         self.meteor_cmd = ['java', '-jar', '-Xmx2G', METEOR_JAR, \
                 '-', '-', '-stdio', '-l', 'en', '-norm']
         self.meteor_p = subprocess.Popen(self.meteor_cmd, \
                 cwd=os.path.dirname(os.path.abspath(__file__)), \
                 stdin=subprocess.PIPE, \
                 stdout=subprocess.PIPE, \
-                stderr=subprocess.PIPE)
+                stderr=subprocess.PIPE,
+                env=self.env, universal_newlines=True, bufsize=1)
         # Used to guarantee thread safety
         self.lock = threading.Lock()
 
     def compute_score(self, gts, res):
         assert(gts.keys() == res.keys())
-        imgIds = gts.keys()
+        imgIds = sorted(list(gts.keys()))
         scores = []
 
         eval_line = 'EVAL'
@@ -37,40 +40,29 @@ class Meteor:
             stat = self._stat(res[i][0], gts[i])
             eval_line += ' ||| {}'.format(stat)
 
-        self.meteor_p.stdin.write('{}\n'.format(eval_line))
-        for i in range(0,len(imgIds)):
-            scores.append(float(self.meteor_p.stdout.readline().strip()))
-        score = float(self.meteor_p.stdout.readline().strip())
+        # Send to METEOR
+        self.meteor_p.stdin.write(eval_line + '\n')
+        
+        # Collect segment scores
+        for i in range(len(imgIds)):
+            score = float(self.meteor_p.stdout.readline().strip())
+            scores.append(score)
+
+        # Final score
+        final_score = float(self.meteor_p.stdout.readline().strip())
         self.lock.release()
 
-        return score, scores
+        return final_score, scores
 
     def method(self):
         return "METEOR"
 
     def _stat(self, hypothesis_str, reference_list):
         # SCORE ||| reference 1 words ||| reference n words ||| hypothesis words
-        hypothesis_str = hypothesis_str.replace('|||','').replace('  ',' ')
+        hypothesis_str = hypothesis_str.replace('|||', '').replace('  ', ' ')
         score_line = ' ||| '.join(('SCORE', ' ||| '.join(reference_list), hypothesis_str))
-        self.meteor_p.stdin.write('{}\n'.format(score_line))
+        self.meteor_p.stdin.write(score_line+'\n')
         return self.meteor_p.stdout.readline().strip()
-
-    def _score(self, hypothesis_str, reference_list):
-        self.lock.acquire()
-        # SCORE ||| reference 1 words ||| reference n words ||| hypothesis words
-        hypothesis_str = hypothesis_str.replace('|||','').replace('  ',' ')
-        score_line = ' ||| '.join(('SCORE', ' ||| '.join(reference_list), hypothesis_str))
-        self.meteor_p.stdin.write('{}\n'.format(score_line))
-        stats = self.meteor_p.stdout.readline().strip()
-        eval_line = 'EVAL ||| {}'.format(stats)
-        # EVAL ||| stats 
-        self.meteor_p.stdin.write('{}\n'.format(eval_line))
-        score = float(self.meteor_p.stdout.readline().strip())
-        # bug fix: there are two values returned by the jar file, one average, and one all, so do it twice
-        # thanks for Andrej for pointing this out
-        score = float(self.meteor_p.stdout.readline().strip())
-        self.lock.release()
-        return score
  
     def __del__(self):
         self.lock.acquire()

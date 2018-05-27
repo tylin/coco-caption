@@ -51,7 +51,7 @@ class Spice:
         if not os.path.exists(temp_dir):
           os.makedirs(temp_dir)
         in_file = tempfile.NamedTemporaryFile(delete=False, dir=temp_dir)
-        json.dump(input_data, in_file, indent=2)
+        in_file.write(json.dumps(input_data, indent=2).encode('utf-8'))
         in_file.close()
 
         # Start job
@@ -85,7 +85,7 @@ class Spice:
         for image_id in imgIds:
           # Convert none to NaN before saving scores over subcategories
           score_set = {}
-          for category,score_tuple in imgId_to_scores[image_id].iteritems():
+          for category,score_tuple in imgId_to_scores[image_id].items():
             score_set[category] = {k: self.float_convert(v) for k, v in score_tuple.items()}
           scores.append(score_set)
         return average_score, scores

@@ -8,7 +8,6 @@
 # Author : Ramakrishna Vedantam <vrama91@vt.edu>
 
 import numpy as np
-import pdb
 
 def my_lcs(string, sub):
     """
@@ -82,8 +81,8 @@ class Rouge():
         :param ref_for_image: dict : reference MS-COCO sentences with "image name" key and "tokenized sentences" as values
         :returns: average_score: float (mean ROUGE-L score computed by averaging scores for all the images)
         """
-        assert(gts.keys() == res.keys())
-        imgIds = gts.keys()
+        assert(list(gts.keys()) == list(res.keys()))
+        imgIds = list(gts.keys())
 
         score = []
         for id in imgIds:

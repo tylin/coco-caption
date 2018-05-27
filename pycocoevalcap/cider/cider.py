@@ -7,7 +7,7 @@
 #
 # Authors: Ramakrishna Vedantam <vrama91@vt.edu> and Tsung-Yi Lin <tl483@cornell.edu>
 
-from cider_scorer import CiderScorer
+from .cider_scorer import CiderScorer
 import pdb
 
 class Cider:
@@ -29,8 +29,8 @@ class Cider:
         :return: cider (float) : computed CIDEr score for the corpus 
         """
 
-        assert(gts.keys() == res.keys())
-        imgIds = gts.keys()
+        assert(list(gts.keys()) == list(res.keys()))
+        imgIds = list(gts.keys())
 
         cider_scorer = CiderScorer(n=self._n, sigma=self._sigma)
 
