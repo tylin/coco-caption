@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 __author__ = 'tylin'
 __version__ = '1.0.1'
 # Interface for accessing the Microsoft COCO dataset.
@@ -42,7 +44,6 @@ __version__ = '1.0.1'
 # Data, paper, and tutorials available at:  http://mscoco.org/
 # Code written by Piotr Dollar and Tsung-Yi Lin, 2014.
 # Licensed under the Simplified BSD License [see bsd.txt]
-from __future__ import print_function
 from builtins import int
 
 import json
@@ -197,7 +198,7 @@ class COCO:
         :return: anns (object array) : loaded ann objects
         """
         if type(ids) == list:
-            return [self.anns[id] for id in ids]
+            return [self.anns[id_] for id_ in ids]
         elif isinstance(ids, int):
             return [self.anns[ids]]
 
@@ -208,8 +209,8 @@ class COCO:
         :return: cats (object array) : loaded cat objects
         """
         if type(ids) == list:
-            return [self.cats[id] for id in ids]
-        elif type(ids) == int:
+            return [self.cats[id_] for id_ in ids]
+        elif isinstance(ids, int):
             return [self.cats[ids]]
 
     def loadImgs(self, ids=[]):
@@ -219,8 +220,8 @@ class COCO:
         :return: imgs (object array) : loaded img objects
         """
         if type(ids) == list:
-            return [self.imgs[id] for id in ids]
-        elif type(ids) == int:
+            return [self.imgs[id_] for id_ in ids]
+        elif isinstance(ids, int):
             return [self.imgs[ids]]
 
     def showAnns(self, anns):
@@ -282,23 +283,23 @@ class COCO:
         if 'caption' in anns[0]:
             imgIds = set([img['id'] for img in res.dataset['images']]) & set([ann['image_id'] for ann in anns])
             res.dataset['images'] = [img for img in res.dataset['images'] if img['id'] in imgIds]
-            for id, ann in enumerate(anns):
-                ann['id'] = id
+            for id_, ann in enumerate(anns):
+                ann['id'] = id_
         elif 'bbox' in anns[0] and not anns[0]['bbox'] == []:
             res.dataset['categories'] = copy.deepcopy(self.dataset['categories'])
-            for id, ann in enumerate(anns):
+            for id_, ann in enumerate(anns):
                 bb = ann['bbox']
                 x1, x2, y1, y2 = [bb[0], bb[0]+bb[2], bb[1], bb[1]+bb[3]]
                 ann['segmentation'] = [[x1, y1, x1, y2, x2, y2, x2, y1]]
                 ann['area'] = bb[2]*bb[3]
-                ann['id'] = id
+                ann['id'] = id_
                 ann['iscrowd'] = 0
         elif 'segmentation' in anns[0]:
             res.dataset['categories'] = copy.deepcopy(self.dataset['categories'])
-            for id, ann in enumerate(anns):
+            for id_, ann in enumerate(anns):
                 ann['area']=sum(ann['segmentation']['counts'][2:-1:2])
                 ann['bbox'] = []
-                ann['id'] = id
+                ann['id'] = id_
                 ann['iscrowd'] = 0
         print('DONE (t=%0.2fs)'%((datetime.datetime.utcnow() - time_t).total_seconds()))
 

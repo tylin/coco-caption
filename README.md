@@ -5,7 +5,7 @@ Evaluation codes for MS COCO caption generation.
 
 ## Requirements ##
 - java 1.8.0
-- python 2.7
+- python (tested 2.7/3.6)
 
 ## Files ##
 ./
