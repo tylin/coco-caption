@@ -1,4 +1,6 @@
 from __future__ import division
+from builtins import dict
+
 import os
 import sys
 import subprocess
@@ -75,7 +77,7 @@ class Spice:
         os.remove(in_file.name)
         os.remove(out_file.name)
 
-        imgId_to_scores = {}
+        imgId_to_scores = dict()
         spice_scores = []
         for item in results:
           imgId_to_scores[item['image_id']] = item['scores']
@@ -84,8 +86,8 @@ class Spice:
         scores = []
         for image_id in imgIds:
           # Convert none to NaN before saving scores over subcategories
-          score_set = {}
-          for category,score_tuple in imgId_to_scores[image_id].iteritems():
+          score_set = dict()
+          for category,score_tuple in imgId_to_scores[image_id].items():
             score_set[category] = {k: self.float_convert(v) for k, v in score_tuple.items()}
           scores.append(score_set)
         return average_score, scores
