@@ -19,7 +19,7 @@ def main():
     root_dir = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
     
     jar_file = os.path.join(root_dir, spice_lib, jar)
-    if os.path.exists(jar_file):
+    if os.path.exists(jar_file.format("")):
         print("Found Stanford CoreNLP.")
     else:
         print("Downloading Stanford CoreNLP...")
