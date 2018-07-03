@@ -1,7 +1,7 @@
 import sys
 import os
 import subprocess
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 bash_command = "./get_stanford_models.sh"
 
@@ -21,6 +21,8 @@ if subprocess.call(bash_command, cwd=curdir) != 0:
 
 setup(
     name="pycocoevalcap",
+    version="0.0",
+    packages=find_packages(),
     zip_safe=False
 )
 
