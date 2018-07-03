@@ -20,6 +20,7 @@ if subprocess.call(bash_command, cwd=curdir) != 0:
     sys.exit(1)
 
 setup(
-    name="pycocoevalcap"
+    name="pycocoevalcap",
+    zip_safe=False
 )
 
