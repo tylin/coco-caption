@@ -34,11 +34,10 @@ Evaluation codes for MS COCO caption generation.
     ./get_stanford_models.sh
 - Note: SPICE will try to create a cache of parsed sentences in ./pycocoevalcap/spice/cache/. This dramatically speeds up repeated evaluations. The cache directory can be moved by setting 'CACHE_DIR' in ./pycocoevalcap/spice. In the same file, caching can be turned off by removing the '-cache' argument to 'spice_cmd'. 
 
-Alternatively, consider cloning, navigating to the cloned repo's root, and running:
+Alternatively, consider using Pip:
 ```bash
-pip install -e .
+pip install git+https://github.com/flauted/coco-caption.git@python23
 ```
-to install the package with pip in editable mode.
 
 ## References ##
 
