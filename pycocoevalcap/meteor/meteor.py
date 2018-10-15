@@ -52,6 +52,7 @@ class Meteor:
         # SCORE ||| reference 1 words ||| reference n words ||| hypothesis words
         hypothesis_str = hypothesis_str.replace('|||','').replace('  ',' ')
         score_line = ' ||| '.join(('SCORE', ' ||| '.join(reference_list), hypothesis_str))
+        score_line = score_line.replace('\n', '').replace('\r', '')
         self.meteor_p.stdin.write('{}\n'.format(score_line))
         return self.meteor_p.stdout.readline().strip()
 
