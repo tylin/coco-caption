@@ -10,7 +10,7 @@ setup(
     name="pycocoevalcap",
     packages=["pycocoevalcap"],
     package_dir={"pycocoevalcap": "pycocoevalcap"},
-    install_requires=['pycocotools']
+    install_requires=['pycocotools'],
     version="0.0",
     zip_safe=False,
     include_package_data=True,
