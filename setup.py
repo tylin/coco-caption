@@ -8,10 +8,11 @@ get_stanford_models.main()
 
 setup(
     name="pycocoevalcap",
-    version="0.0",
     packages=["pycocoevalcap"],
+    package_dir={"pycocoevalcap": "pycocoevalcap"},
+    install_requires=['pycocotools']
+    version="0.0",
     zip_safe=False,
     include_package_data=True,
-    install_requires=['pycocotools']
 )
 
