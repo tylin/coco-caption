@@ -5,7 +5,8 @@ Evaluation codes for MS COCO caption generation.
 
 ## Requirements ##
 - java 1.8.0
-- python 2.7
+- python 3
+  - gensim
 
 ## Files ##
 ./
@@ -27,12 +28,15 @@ Evaluation codes for MS COCO caption generation.
 - rouge: Rouge-L evaluation codes
 - cider: CIDEr evaluation codes
 - spice: SPICE evaluation codes
+- wmd: Word Mover's Distance evaluation codes
 
 ## Setup ##
 
 - You will first need to download the [Stanford CoreNLP 3.6.0](http://stanfordnlp.github.io/CoreNLP/index.html) code and models for use by SPICE. To do this, run:
-    ./get_stanford_models.sh
+    bash get_stanford_models.sh
 - Note: SPICE will try to create a cache of parsed sentences in ./pycocoevalcap/spice/cache/. This dramatically speeds up repeated evaluations. The cache directory can be moved by setting 'CACHE_DIR' in ./pycocoevalcap/spice. In the same file, caching can be turned off by removing the '-cache' argument to 'spice_cmd'. 
+- You will also need to download the Google News negative 300 word2vec model for use by WMD. To do this, run:
+    bash get_google_word2vec_model.sh
 
 ## References ##
 
@@ -43,6 +47,12 @@ Evaluation codes for MS COCO caption generation.
 - Rouge-L: [ROUGE: A Package for Automatic Evaluation of Summaries](http://anthology.aclweb.org/W/W04/W04-1013.pdf)
 - CIDEr: [CIDEr: Consensus-based Image Description Evaluation](http://arxiv.org/pdf/1411.5726.pdf)
 - SPICE: [SPICE: Semantic Propositional Image Caption Evaluation](https://arxiv.org/abs/1607.08822)
+- WMD: [From word embeddings to document distances](http://proceedings.mlr.press/v37/kusnerb15.html) (original metric publication) and [Re-evaluating Automatic Metrics for Image Captioning](http://aclweb.org/anthology/E17-1019) (publication with metric adapted for caption generation)
+
+Also,
+
+- Stop words distributed by the NLTK Stopwords Corpus [nltk.corpus.stopwords.words('english')], which originate from [https://anoncvs.postgresql.org/cvsweb.cgi/pgsql/src/backend/snowball/stopwords/] and later augmented at [https://github.com/nltk/nltk_data/issues/22], were extracted and put in a text file in pycocoevalcap/wmd/data to avoid requiring users to install NLTK.
+- Special thanks to David Semedo [https://github.com/davidfsemedo/coco-caption] for writing a Python 3 compatible version of coco-caption first and which was used as a reference to help make this fork.
 
 ## Developers ##
 - Xinlei Chen (CMU)
@@ -54,3 +64,4 @@ Evaluation codes for MS COCO caption generation.
 - David Chiang (University of Norte Dame)
 - Michael Denkowski (CMU)
 - Alexander Rush (Harvard University)
+- Mert Kilickaya (Hacettepe University)
