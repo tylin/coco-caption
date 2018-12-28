@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Python wrapper for METEOR implementation, by Xinlei Chen
-# Acknowledge Michael Denkowski for the generous discussion and help 
+# Acknowledge Michael Denkowski for the generous discussion and help
 
 import os
 import sys
@@ -37,7 +37,8 @@ class Meteor:
             stat = self._stat(res[i][0], gts[i])
             eval_line += ' ||| {}'.format(stat)
 
-        self.meteor_p.stdin.write('{}\n'.format(eval_line))
+        self.meteor_p.stdin.write('{}\n'.format(eval_line).encode())
+        self.meteor_p.stdin.flush()
         for i in range(0,len(imgIds)):
             scores.append(float(self.meteor_p.stdout.readline().strip()))
         score = float(self.meteor_p.stdout.readline().strip())
@@ -52,8 +53,9 @@ class Meteor:
         # SCORE ||| reference 1 words ||| reference n words ||| hypothesis words
         hypothesis_str = hypothesis_str.replace('|||','').replace('  ',' ')
         score_line = ' ||| '.join(('SCORE', ' ||| '.join(reference_list), hypothesis_str))
-        self.meteor_p.stdin.write('{}\n'.format(score_line))
-        return self.meteor_p.stdout.readline().strip()
+        self.meteor_p.stdin.write('{}\n'.format(score_line).encode())
+        self.meteor_p.stdin.flush()
+        return self.meteor_p.stdout.readline().decode().strip()
 
     def _score(self, hypothesis_str, reference_list):
         self.lock.acquire()
@@ -63,7 +65,7 @@ class Meteor:
         self.meteor_p.stdin.write('{}\n'.format(score_line))
         stats = self.meteor_p.stdout.readline().strip()
         eval_line = 'EVAL ||| {}'.format(stats)
-        # EVAL ||| stats 
+        # EVAL ||| stats
         self.meteor_p.stdin.write('{}\n'.format(eval_line))
         score = float(self.meteor_p.stdout.readline().strip())
         # bug fix: there are two values returned by the jar file, one average, and one all, so do it twice
@@ -71,7 +73,7 @@ class Meteor:
         score = float(self.meteor_p.stdout.readline().strip())
         self.lock.release()
         return score
- 
+
     def __del__(self):
         self.lock.acquire()
         self.meteor_p.stdin.close()

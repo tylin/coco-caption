@@ -1,4 +1,6 @@
 from __future__ import division
+from builtins import dict
+
 import os
 import sys
 import subprocess
@@ -10,8 +12,8 @@ import tempfile
 
 # Assumes spice.jar is in the same directory as spice.py.  Change as needed.
 SPICE_JAR = 'spice-1.0.jar'
-TEMP_DIR = 'tmp'
-CACHE_DIR = 'cache'
+TEMP_DIR = os.environ.get('SPICE_TEMP_DIR', 'tmp')
+CACHE_DIR = os.environ.get('SPICE_CACHE_DIR', 'cache')
 
 class Spice:
     """
@@ -50,7 +52,8 @@ class Spice:
         temp_dir=os.path.join(cwd, TEMP_DIR)
         if not os.path.exists(temp_dir):
           os.makedirs(temp_dir)
-        in_file = tempfile.NamedTemporaryFile(delete=False, dir=temp_dir)
+        in_file = tempfile.NamedTemporaryFile(
+            mode="w+", delete=False, dir=temp_dir)
         json.dump(input_data, in_file, indent=2)
         in_file.close()
 
@@ -75,7 +78,7 @@ class Spice:
         os.remove(in_file.name)
         os.remove(out_file.name)
 
-        imgId_to_scores = {}
+        imgId_to_scores = dict()
         spice_scores = []
         for item in results:
           imgId_to_scores[item['image_id']] = item['scores']
@@ -84,8 +87,8 @@ class Spice:
         scores = []
         for image_id in imgIds:
           # Convert none to NaN before saving scores over subcategories
-          score_set = {}
-          for category,score_tuple in imgId_to_scores[image_id].iteritems():
+          score_set = dict()
+          for category,score_tuple in imgId_to_scores[image_id].items():
             score_set[category] = {k: self.float_convert(v) for k, v in score_tuple.items()}
           scores.append(score_set)
         return average_score, scores
