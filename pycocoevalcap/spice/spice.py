@@ -12,8 +12,8 @@ import tempfile
 
 # Assumes spice.jar is in the same directory as spice.py.  Change as needed.
 SPICE_JAR = 'spice-1.0.jar'
-TEMP_DIR = 'tmp'
-CACHE_DIR = 'cache'
+TEMP_DIR = os.environ.get('SPICE_TEMP_DIR', 'tmp')
+CACHE_DIR = os.environ.get('SPICE_CACHE_DIR', 'cache')
 
 class Spice:
     """
