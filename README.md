@@ -11,12 +11,18 @@ Caption evaluation depends on the COCO API that natively supports Python 3 (see 
 
 ## Requirements ##
 - Java 1.8.0
-- Python 3 (tested on Python 3.6)
+- Python 3
 - pycocotools (COCO Python API): https://github.com/cocodataset/cocoapi
+
+## Installation ##
+To install pycocoevalcap and the pycocotools dependency, run:
+```
+pip install git+https://github.com/salaniz/pycocoevalcap
+```
 
 ## Files ##
 ./
-- evals.py: The file includes COCOEavlCap class that can be used to evaluate results on COCO.
+- eval.py: The file includes COCOEavlCap class that can be used to evaluate results on COCO.
 - tokenizer: Python wrapper of Stanford CoreNLP PTBTokenizer
 - bleu: Bleu evalutation codes
 - meteor: Meteor evaluation codes

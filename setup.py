@@ -9,4 +9,5 @@ setup(
     packages=['pycocoevalcap']+package_names,
     package_dir={'pycocoevalcap': '.'},
     package_data={'': ['*.jar', '*.gz']},
+    install_requires=['pycocotools>=2.0.0']
 )
