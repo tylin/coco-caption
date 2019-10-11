@@ -9,10 +9,11 @@
 # Authors : Hao Fang <hfang@uw.edu> and Tsung-Yi Lin <tl483@cornell.edu>
 
 from __future__ import absolute_import
+from builtins import object
 from .bleu_scorer import BleuScorer
 
 
-class Bleu:
+class Bleu(object):
     def __init__(self, n=4):
         # default compute Blue score up to 4
         self._n = n
@@ -21,8 +22,8 @@ class Bleu:
 
     def compute_score(self, gts, res):
 
-        assert(gts.keys() == res.keys())
-        imgIds = gts.keys()
+        assert(list(gts.keys()) == list(res.keys()))
+        imgIds = list(gts.keys())
 
         bleu_scorer = BleuScorer(n=self._n)
         for id in imgIds:

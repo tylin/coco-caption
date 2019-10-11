@@ -8,6 +8,9 @@
 # Last Modified : Thu Mar 19 09:53:35 2015
 # Authors : Hao Fang <hfang@uw.edu> and Tsung-Yi Lin <tl483@cornell.edu>
 
+from builtins import zip
+from builtins import range
+from builtins import object
 import os
 import sys
 import subprocess
@@ -21,7 +24,7 @@ STANFORD_CORENLP_3_4_1_JAR = 'stanford-corenlp-3.4.1.jar'
 PUNCTUATIONS = ["''", "'", "``", "`", "-LRB-", "-RRB-", "-LCB-", "-RCB-", \
         ".", "?", "!", ",", ":", "-", "--", "...", ";"] 
 
-class PTBTokenizer:
+class PTBTokenizer(object):
     """Python wrapper of Stanford PTBTokenizer"""
 
     def tokenize(self, captions_for_image):
@@ -33,8 +36,8 @@ class PTBTokenizer:
         # prepare data for PTB Tokenizer
         # ======================================================
         final_tokenized_captions_for_image = {}
-        image_id = [k for k, v in captions_for_image.items() for _ in range(len(v))]
-        sentences = '\n'.join([c['caption'].replace('\n', ' ') for k, v in captions_for_image.items() for c in v])
+        image_id = [k for k, v in list(captions_for_image.items()) for _ in range(len(v))]
+        sentences = '\n'.join([c['caption'].replace('\n', ' ') for k, v in list(captions_for_image.items()) for c in v])
 
         # ======================================================
         # save sentences to temporary file

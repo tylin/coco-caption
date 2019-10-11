@@ -1,5 +1,7 @@
 from __future__ import print_function
 from __future__ import absolute_import
+from builtins import zip
+from builtins import object
 __author__ = 'tylin'
 from .tokenizer.ptbtokenizer import PTBTokenizer
 from .bleu.bleu import Bleu
@@ -8,7 +10,7 @@ from .rouge.rouge import Rouge
 from .cider.cider import Cider
 from .spice.spice import Spice
 
-class COCOEvalCap:
+class COCOEvalCap(object):
     def __init__(self, coco, cocoRes):
         self.evalImgs = []
         self.eval = {}
@@ -55,11 +57,11 @@ class COCOEvalCap:
             if type(method) == list:
                 for sc, scs, m in zip(score, scores, method):
                     self.setEval(sc, m)
-                    self.setImgToEvalImgs(scs, gts.keys(), m)
+                    self.setImgToEvalImgs(scs, list(gts.keys()), m)
                     print("%s: %0.3f"%(m, sc))
             else:
                 self.setEval(score, method)
-                self.setImgToEvalImgs(scores, gts.keys(), method)
+                self.setImgToEvalImgs(scores, list(gts.keys()), method)
                 print("%s: %0.3f"%(method, score))
         self.setEvalImgs()
 
@@ -74,4 +76,4 @@ class COCOEvalCap:
             self.imgToEval[imgId][method] = score
 
     def setEvalImgs(self):
-        self.evalImgs = [eval for imgId, eval in self.imgToEval.items()]
+        self.evalImgs = [eval for imgId, eval in list(self.imgToEval.items())]

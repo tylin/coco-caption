@@ -7,6 +7,8 @@
 # Creation Date : 2015-01-07 06:03
 # Author : Ramakrishna Vedantam <vrama91@vt.edu>
 
+from builtins import range
+from builtins import object
 import numpy as np
 import pdb
 
@@ -33,7 +35,7 @@ def my_lcs(string, sub):
 
     return lengths[len(string)][len(sub)]
 
-class Rouge():
+class Rouge(object):
     '''
     Class for computing ROUGE-L score for a set of candidate sentences for the MS COCO test set
 
@@ -82,8 +84,8 @@ class Rouge():
         :param ref_for_image: dict : reference MS-COCO sentences with "image name" key and "tokenized sentences" as values
         :returns: average_score: float (mean ROUGE-L score computed by averaging scores for all the images)
         """
-        assert(gts.keys() == res.keys())
-        imgIds = gts.keys()
+        assert(list(gts.keys()) == list(res.keys()))
+        imgIds = list(gts.keys())
 
         score = []
         for id in imgIds:

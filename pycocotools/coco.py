@@ -1,4 +1,8 @@
 from __future__ import print_function
+from __future__ import division
+from builtins import range
+from builtins import object
+from past.utils import old_div
 __author__ = 'tylin'
 __version__ = '1.0.1'
 # Interface for accessing the Microsoft COCO dataset.
@@ -53,7 +57,7 @@ import numpy as np
 from skimage.draw import polygon
 import copy
 
-class COCO:
+class COCO(object):
     def __init__(self, annotation_file=None):
         """
         Constructor of Microsoft COCO helper class for reading and visualizing annotations.
@@ -113,7 +117,7 @@ class COCO:
         Print information about the annotation file.
         :return:
         """
-        for key, value in self.datset['info'].items():
+        for key, value in list(self.datset['info'].items()):
             print('%s: %s'%(key, value))
 
     def getAnnIds(self, imgIds=[], catIds=[], areaRng=[], iscrowd=None):
@@ -179,7 +183,7 @@ class COCO:
         catIds = catIds if type(catIds) == list else [catIds]
 
         if len(imgIds) == len(catIds) == 0:
-            ids = self.imgs.keys()
+            ids = list(self.imgs.keys())
         else:
             ids = set(imgIds)
             for catId in catIds:
@@ -239,7 +243,7 @@ class COCO:
                 if type(ann['segmentation']) == list:
                     # polygon
                     for seg in ann['segmentation']:
-                        poly = np.array(seg).reshape((len(seg)/2, 2))
+                        poly = np.array(seg).reshape((old_div(len(seg),2), 2))
                         polygons.append(Polygon(poly, True,alpha=0.4))
                         color.append(c)
                 else:
@@ -247,7 +251,7 @@ class COCO:
                     mask = COCO.decodeMask(ann['segmentation'])
                     img = np.ones( (mask.shape[0], mask.shape[1], 3) )
                     if ann['iscrowd'] == 1:
-                        color_mask = np.array([2.0,166.0,101.0])/255
+                        color_mask = old_div(np.array([2.0,166.0,101.0]),255)
                     if ann['iscrowd'] == 0:
                         color_mask = np.random.random((1, 3)).tolist()[0]
                     for i in range(3):

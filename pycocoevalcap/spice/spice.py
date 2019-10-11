@@ -1,4 +1,5 @@
 from __future__ import division
+from builtins import object
 import os
 import sys
 import subprocess
@@ -13,7 +14,7 @@ SPICE_JAR = 'spice-1.0.jar'
 TEMP_DIR = 'tmp'
 CACHE_DIR = 'cache'
 
-class Spice:
+class Spice(object):
     """
     Main Class to compute the SPICE metric 
     """
@@ -85,8 +86,8 @@ class Spice:
         for image_id in imgIds:
           # Convert none to NaN before saving scores over subcategories
           score_set = {}
-          for category,score_tuple in imgId_to_scores[image_id].iteritems():
-            score_set[category] = {k: self.float_convert(v) for k, v in score_tuple.items()}
+          for category,score_tuple in imgId_to_scores[image_id].items():
+            score_set[category] = {k: self.float_convert(v) for k, v in list(score_tuple.items())}
           scores.append(score_set)
         return average_score, scores
 
