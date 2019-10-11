@@ -84,7 +84,7 @@ class Rouge(object):
         :param ref_for_image: dict : reference MS-COCO sentences with "image name" key and "tokenized sentences" as values
         :returns: average_score: float (mean ROUGE-L score computed by averaging scores for all the images)
         """
-        assert(list(gts.keys()) == list(res.keys()))
+        assert(all([key in gts for key in res]) and all([key in res for key in gts]))
         imgIds = list(gts.keys())
 
         score = []

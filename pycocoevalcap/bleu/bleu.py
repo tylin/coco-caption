@@ -22,7 +22,7 @@ class Bleu(object):
 
     def compute_score(self, gts, res):
 
-        assert(list(gts.keys()) == list(res.keys()))
+        assert(all([key in gts for key in res]) and all([key in res for key in gts]))
         imgIds = list(gts.keys())
 
         bleu_scorer = BleuScorer(n=self._n)
