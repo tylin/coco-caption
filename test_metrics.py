@@ -1,3 +1,4 @@
+from __future__ import print_function
 from pycocoevalcap.bleu import bleu
 from pycocoevalcap.cider import cider
 from pycocoevalcap.meteor import meteor

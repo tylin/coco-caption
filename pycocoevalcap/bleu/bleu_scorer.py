@@ -15,6 +15,7 @@
 cook_refs(refs, n=4): Transform a list of reference sentences as strings into a form usable by cook_test().
 cook_test(test, refs, n=4): Transform a test sentence as a string (together with the cooked reference sentences) into a form usable by score_cooked().
 '''
+from __future__ import print_function
 
 import copy
 import sys, math, re
@@ -57,10 +58,10 @@ def cook_refs(refs, eff=None, n=4): ## lhuang: oracle will call with "average"
 
     return (reflen, maxcounts)
 
-def cook_test(test, (reflen, refmaxcounts), eff=None, n=4):
+def cook_test(test, xxx_todo_changeme, eff=None, n=4):
     '''Takes a test sentence and returns an object that
     encapsulates everything that BLEU needs to know about it.'''
-
+    (reflen, refmaxcounts) = xxx_todo_changeme
     testlen, counts = precook(test, n, True)
 
     result = {}
@@ -239,7 +240,7 @@ class BleuScorer(object):
                     bleu_list[k][-1] *= math.exp(1 - 1/ratio)
 
             if verbose > 1:
-                print comps, reflen
+                print(comps, reflen)
 
         totalcomps['reflen'] = self._reflen
         totalcomps['testlen'] = self._testlen
@@ -256,8 +257,8 @@ class BleuScorer(object):
                 bleus[k] *= math.exp(1 - 1/ratio)
 
         if verbose > 0:
-            print totalcomps
-            print "ratio:", ratio
+            print(totalcomps)
+            print("ratio:", ratio)
 
         self._score = bleus
         return self._score, bleu_list

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Filename: cider.py
 #
 # Description: Describes the class to compute the CIDEr (Consensus-Based Image Description Evaluation) Metric 
@@ -7,7 +8,7 @@
 #
 # Authors: Ramakrishna Vedantam <vrama91@vt.edu> and Tsung-Yi Lin <tl483@cornell.edu>
 
-from cider_scorer import CiderScorer
+from .cider_scorer import CiderScorer
 import pdb
 
 class Cider:
