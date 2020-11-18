@@ -7,18 +7,20 @@ Evaluation codes for MS COCO caption generation.
 This repository provides Python 3 support for the caption evaluation metrics used for the MS COCO dataset.
 
 The code is derived from the original repository that supports Python 2.7: https://github.com/tylin/coco-caption.  
-Caption evaluation depends on the COCO API that natively supports Python 3 (see Requirements).
+Caption evaluation depends on the COCO API that natively supports Python 3.
 
 ## Requirements ##
 - Java 1.8.0
 - Python 3
-- pycocotools (COCO Python API): https://github.com/cocodataset/cocoapi
 
 ## Installation ##
-To install pycocoevalcap and the pycocotools dependency, run:
+To install pycocoevalcap and the pycocotools dependency (https://github.com/cocodataset/cocoapi), run:
 ```
-pip install git+https://github.com/salaniz/pycocoevalcap
+pip install pycocoevalcap
 ```
+
+## Usage ##
+See the example script: [example/coco_eval_example.py](example/coco_eval_example.py)
 
 ## Files ##
 ./
