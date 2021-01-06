@@ -50,7 +50,7 @@ class PTBTokenizer:
         # tokenize sentence
         # ======================================================
         cmd.append(os.path.basename(tmp_file.name))
-        if verbose:
+        if self.verbose:
             p_tokenizer = subprocess.Popen(cmd, cwd=path_to_jar_dirname, \
                 stdout=subprocess.PIPE)
         else:
