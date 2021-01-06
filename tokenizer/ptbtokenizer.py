@@ -23,7 +23,7 @@ PUNCTUATIONS = ["''", "'", "``", "`", "-LRB-", "-RRB-", "-LCB-", "-RCB-", \
 
 class PTBTokenizer:
     """Python wrapper of Stanford PTBTokenizer"""
-    def __init__(self, verbose):
+    def __init__(self, verbose=True):
         self.verbose = verbose
 
     def tokenize(self, captions_for_image):
