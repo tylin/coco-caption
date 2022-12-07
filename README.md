@@ -3,24 +3,28 @@ Microsoft COCO Caption Evaluation
 
 Evaluation codes for MS COCO caption generation.
 
+## Description ##
+This repository provides Python 3 support for the caption evaluation metrics used for the MS COCO dataset.
+
+The code is derived from the original repository that supports Python 2.7: https://github.com/tylin/coco-caption.  
+Caption evaluation depends on the COCO API that natively supports Python 3.
+
 ## Requirements ##
-- java 1.8.0
-- python 2.7
+- Java 1.8.0
+- Python 3
+
+## Installation ##
+To install pycocoevalcap and the pycocotools dependency (https://github.com/cocodataset/cocoapi), run:
+```
+pip install pycocoevalcap
+```
+
+## Usage ##
+See the example script: [example/coco_eval_example.py](example/coco_eval_example.py)
 
 ## Files ##
 ./
-- cocoEvalCapDemo.py (demo script)
-
-./annotation
-- captions_val2014.json (MS COCO 2014 caption validation set)
-- Visit MS COCO [download](http://mscoco.org/dataset/#download) page for more details.
-
-./results
-- captions_val2014_fakecap_results.json (an example of fake results for running demo)
-- Visit MS COCO [format](http://mscoco.org/dataset/#format) page for more details.
-
-./pycocoevalcap: The folder where all evaluation codes are stored.
-- evals.py: The file includes COCOEavlCap class that can be used to evaluate results on COCO.
+- eval.py: The file includes COCOEavlCap class that can be used to evaluate results on COCO.
 - tokenizer: Python wrapper of Stanford CoreNLP PTBTokenizer
 - bleu: Bleu evalutation codes
 - meteor: Meteor evaluation codes
@@ -30,9 +34,8 @@ Evaluation codes for MS COCO caption generation.
 
 ## Setup ##
 
-- You will first need to download the [Stanford CoreNLP 3.6.0](http://stanfordnlp.github.io/CoreNLP/index.html) code and models for use by SPICE. To do this, run:
-    ./get_stanford_models.sh
-- Note: SPICE will try to create a cache of parsed sentences in ./pycocoevalcap/spice/cache/. This dramatically speeds up repeated evaluations. The cache directory can be moved by setting 'CACHE_DIR' in ./pycocoevalcap/spice. In the same file, caching can be turned off by removing the '-cache' argument to 'spice_cmd'. 
+- SPICE requires the download of [Stanford CoreNLP 3.6.0](http://stanfordnlp.github.io/CoreNLP/index.html) code and models. This will be done automatically the first time the SPICE evaluation is performed.
+- Note: SPICE will try to create a cache of parsed sentences in ./spice/cache/. This dramatically speeds up repeated evaluations. The cache directory can be moved by setting 'CACHE_DIR' in ./spice. In the same file, caching can be turned off by removing the '-cache' argument to 'spice_cmd'.
 
 ## References ##
 
